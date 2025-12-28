@@ -2,65 +2,66 @@ import type { Project } from '../types';
 
 export const projects: Project[] = [
   {
-    id: 'project-1',
-    title: 'AI-Powered Code Assistant',
+    id: 'mobile-penrose-tiler',
+    title: 'Mobile Penrose Tiler',
     description:
-      'An intelligent code review and suggestion tool leveraging LLMs to analyze code patterns, detect bugs, and suggest optimizations in real-time.',
-    technologies: ['Python', 'TypeScript', 'OpenAI API', 'FastAPI', 'React'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://demo.example.com',
-    featured: true,
-    category: 'ai-ml',
-  },
-  {
-    id: 'project-2',
-    title: 'Distributed Task Queue',
-    description:
-      'High-performance, fault-tolerant distributed task queue system supporting millions of jobs per day with automatic retry and dead letter handling.',
-    technologies: ['Go', 'Redis', 'PostgreSQL', 'gRPC', 'Kubernetes'],
-    githubUrl: 'https://github.com',
-    featured: true,
-    category: 'backend',
-  },
-  {
-    id: 'project-3',
-    title: 'Real-Time Collaboration Platform',
-    description:
-      'WebSocket-powered collaborative workspace enabling real-time document editing, cursor presence, and conflict-free replicated data types (CRDTs).',
-    technologies: ['TypeScript', 'Node.js', 'WebSocket', 'Y.js', 'React'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://demo.example.com',
+      'Interactive web application for creating mathematical tile patterns including Penrose, Einstein hat, triangular, and hexagonal tilings with real-time visual feedback and high-resolution export.',
+    technologies: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Vercel'],
+    githubUrl: 'https://github.com/APatelUIUC/MobilePenroseTiler',
+    liveUrl: 'https://mobilepenrosetiler.vercel.app',
     featured: true,
     category: 'web',
   },
   {
-    id: 'project-4',
-    title: 'Cloud Infrastructure Toolkit',
+    id: 'gather',
+    title: 'Gather - Event Platform',
     description:
-      'Terraform modules and automation scripts for deploying secure, scalable cloud infrastructure across AWS, GCP, and Azure.',
-    technologies: ['Terraform', 'AWS', 'Python', 'GitHub Actions', 'Docker'],
-    githubUrl: 'https://github.com',
-    featured: false,
-    category: 'devops',
-  },
-  {
-    id: 'project-5',
-    title: 'Mobile Fitness Tracker',
-    description:
-      'Cross-platform mobile application for tracking workouts, nutrition, and health metrics with ML-powered insights and personalized recommendations.',
-    technologies: ['React Native', 'TypeScript', 'Node.js', 'MongoDB', 'TensorFlow'],
-    githubUrl: 'https://github.com',
-    featured: false,
-    category: 'mobile',
-  },
-  {
-    id: 'project-6',
-    title: 'Open Source CLI Framework',
-    description:
-      'Developer-friendly CLI framework with auto-generated help, plugin architecture, and rich terminal UI components.',
-    technologies: ['Rust', 'CLI', 'Terminal UI'],
-    githubUrl: 'https://github.com',
+      'A Partiful-inspired event management system with beautiful invitations, RSVP tracking, guest messaging, and waitlist management. Features 20+ curated templates across 10 categories.',
+    technologies: ['React', 'Vite', 'Node.js', 'Express', 'SQLite', 'Framer Motion'],
+    githubUrl: 'https://github.com/APatelUIUC/AutonomouslyImprovingGather',
     featured: true,
+    category: 'web',
+  },
+  {
+    id: '3d-voronoi',
+    title: '3D Voronoi Visualization',
+    description:
+      'Interactive 3D visualization of Voronoi diagrams, bringing mathematical tessellation concepts to life with real-time rendering and manipulation capabilities.',
+    technologies: ['JavaScript', 'Three.js', 'CSS', 'HTML5 Canvas'],
+    githubUrl: 'https://github.com/APatelUIUC/3dVoronoi',
+    liveUrl: 'https://3d-voronoi.vercel.app',
+    featured: true,
+    category: 'web',
+  },
+  {
+    id: 'tiling-music',
+    title: 'Tiling Music',
+    description:
+      'An experimental project exploring the intersection of mathematical tilings and music visualization, creating audio-reactive geometric patterns.',
+    technologies: ['JavaScript', 'Web Audio API', 'CSS', 'HTML5'],
+    githubUrl: 'https://github.com/APatelUIUC/tiling-music',
+    liveUrl: 'https://tiling-music.vercel.app',
+    featured: false,
+    category: 'web',
+  },
+  {
+    id: 'einstein-tiling',
+    title: 'Einstein Hat Tiling',
+    description:
+      'Fork and enhancement of the hatviz project for constructing aperiodic hat tilings - the famous "einstein" monotile discovered in 2023.',
+    technologies: ['JavaScript', 'P5.js', 'Mathematics'],
+    githubUrl: 'https://github.com/APatelUIUC/EinsteinCopy',
+    featured: false,
+    category: 'open-source',
+  },
+  {
+    id: 'tactile-js',
+    title: 'Tactile.js Fork',
+    description:
+      'Enhanced JavaScript library for representing, manipulating, and drawing periodic tilings with improved mobile support and additional tiling patterns.',
+    technologies: ['JavaScript', 'Canvas API', 'Mathematics'],
+    githubUrl: 'https://github.com/APatelUIUC/mytactile',
+    featured: false,
     category: 'open-source',
   },
 ];

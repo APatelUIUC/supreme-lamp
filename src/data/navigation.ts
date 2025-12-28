@@ -11,31 +11,26 @@ export const navItems: NavItem[] = [
 export const socialLinks: SocialLink[] = [
   {
     platform: 'GitHub',
-    url: 'https://github.com',
+    url: 'https://github.com/APatelUIUC',
     icon: 'github',
   },
   {
     platform: 'LinkedIn',
-    url: 'https://linkedin.com',
+    url: 'https://linkedin.com/in/akashpateluiuc',
     icon: 'linkedin',
   },
   {
-    platform: 'Twitter',
-    url: 'https://twitter.com',
-    icon: 'twitter',
-  },
-  {
     platform: 'Email',
-    url: 'mailto:hello@example.com',
+    url: 'mailto:akash@patel.dev',
     icon: 'mail',
   },
 ];
 
 export const personalInfo = {
-  name: 'Your Name',
-  title: 'Software Engineer',
-  tagline: 'Building the future, one line at a time',
-  location: 'San Francisco, CA',
-  email: 'hello@example.com',
+  name: 'Akash Patel',
+  title: 'Full Stack Developer',
+  tagline: 'Crafting tessellations in code and design',
+  location: 'Raleigh, NC',
+  email: 'akash@patel.dev',
   resumeUrl: '/resume.pdf',
 };

@@ -83,9 +83,9 @@ const Hero = ({ visible }: HeroProps) => {
           </p>
 
           <p className={styles.description}>
-            I craft elegant solutions to complex problems, specializing in building
-            exceptional digital experiences. Currently focused on creating accessible,
-            human-centered products.
+            Full stack developer at Chekhub, building operations management software.
+            UIUC alum passionate about mathematical patterns, generative art, and
+            bringing tessellations to life through code.
           </p>
 
           <div className={styles.ctas}>
@@ -111,12 +111,12 @@ const Hero = ({ visible }: HeroProps) => {
         <div className={styles.floatingCode}>
           <div className={styles.codeBlock}>
             <span className={styles.codeKeyword}>const</span>{' '}
-            <span className={styles.codeVar}>developer</span> = {'{'}
+            <span className={styles.codeVar}>tessellate</span> = {'{'}
             <br />
-            &nbsp;&nbsp;<span className={styles.codeProp}>passion</span>:{' '}
-            <span className={styles.codeString}>'infinite'</span>,
+            &nbsp;&nbsp;<span className={styles.codeProp}>pattern</span>:{' '}
+            <span className={styles.codeString}>'penrose'</span>,
             <br />
-            &nbsp;&nbsp;<span className={styles.codeProp}>coffee</span>:{' '}
+            &nbsp;&nbsp;<span className={styles.codeProp}>infinite</span>:{' '}
             <span className={styles.codeNumber}>true</span>
             <br />
             {'}'};
@@ -125,7 +125,7 @@ const Hero = ({ visible }: HeroProps) => {
 
         {/* Tech stack floating badges */}
         <div className={styles.techBadges}>
-          {['React', 'TypeScript', 'Node.js', 'Go', 'AWS'].map((tech, i) => (
+          {['React', 'TypeScript', 'Next.js', 'Node.js', 'PostgreSQL'].map((tech, i) => (
             <span
               key={tech}
               className={styles.techBadge}

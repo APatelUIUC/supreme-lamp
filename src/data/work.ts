@@ -2,49 +2,34 @@ import type { WorkExperience } from '../types';
 
 export const workExperience: WorkExperience[] = [
   {
-    id: 'work-1',
-    company: 'Tech Innovators Inc.',
-    role: 'Senior Software Engineer',
+    id: 'chekhub',
+    company: 'Chekhub',
+    role: 'Full Stack Developer',
     period: '2022 - Present',
     description:
-      'Leading development of cloud-native applications and mentoring junior developers. Architecting scalable microservices and implementing DevOps best practices.',
+      'Building the operations management platform that empowers businesses to manage, scale, and optimize their workforce. Working across the full stack on a B2B SaaS product serving data centers, healthcare, telecom, and property management industries.',
     highlights: [
-      'Reduced system latency by 40% through database optimization and caching strategies',
-      'Led migration of monolith to microservices, improving deployment frequency by 300%',
-      'Mentored 5 junior developers, establishing code review and testing practices',
-      'Implemented CI/CD pipelines reducing deployment time from hours to minutes',
+      'Developing features for asset management, workforce performance, and customer engagement modules',
+      'Building mobile-first responsive interfaces for field workers and managers',
+      'Implementing real-time operations dashboards and reporting tools',
+      'Contributing to digital MOPs, SOPs, and training management systems',
     ],
-    technologies: ['TypeScript', 'Go', 'Kubernetes', 'AWS', 'PostgreSQL'],
+    technologies: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'AWS'],
   },
   {
-    id: 'work-2',
-    company: 'Digital Solutions Co.',
-    role: 'Full Stack Developer',
-    period: '2020 - 2022',
+    id: 'ibm',
+    company: 'IBM',
+    role: 'Software Engineer',
+    period: '2019 - 2022',
     description:
-      'Built and maintained full-stack web applications, working across the entire product lifecycle from design to deployment.',
+      'Worked on enterprise software solutions, contributing to large-scale systems and gaining experience with enterprise-grade development practices and methodologies.',
     highlights: [
-      'Developed real-time collaboration features serving 50,000+ daily active users',
-      'Built responsive web applications with 99.9% uptime SLA',
-      'Integrated third-party APIs and payment systems for e-commerce platform',
-      'Optimized frontend performance achieving 95+ Lighthouse scores',
+      'Developed and maintained enterprise applications serving global clients',
+      'Collaborated with cross-functional teams on complex technical projects',
+      'Implemented best practices for code quality, testing, and documentation',
+      'Gained experience with enterprise architecture and cloud infrastructure',
     ],
-    technologies: ['React', 'Node.js', 'Python', 'MongoDB', 'Docker'],
-  },
-  {
-    id: 'work-3',
-    company: 'Startup Labs',
-    role: 'Software Developer',
-    period: '2018 - 2020',
-    description:
-      'Early-stage startup experience building products from scratch, wearing multiple hats across development, testing, and deployment.',
-    highlights: [
-      'Built MVP that secured $2M seed funding',
-      'Implemented automated testing reducing bug reports by 60%',
-      'Designed and built RESTful APIs consumed by mobile and web clients',
-      'Established coding standards and documentation practices',
-    ],
-    technologies: ['JavaScript', 'Python', 'React', 'Firebase', 'AWS'],
+    technologies: ['Java', 'Python', 'React', 'Docker', 'Kubernetes'],
   },
 ];
 

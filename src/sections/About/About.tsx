@@ -2,14 +2,14 @@ import { useRef, useEffect, useState } from 'react';
 import styles from './About.module.css';
 
 const skills = [
-  { name: 'TypeScript', level: 95 },
-  { name: 'React', level: 92 },
-  { name: 'Node.js', level: 88 },
-  { name: 'Python', level: 85 },
-  { name: 'Go', level: 78 },
-  { name: 'AWS', level: 82 },
+  { name: 'React', level: 95 },
+  { name: 'TypeScript', level: 92 },
+  { name: 'Node.js', level: 90 },
+  { name: 'Next.js', level: 88 },
   { name: 'PostgreSQL', level: 85 },
-  { name: 'Docker', level: 88 },
+  { name: 'Python', level: 82 },
+  { name: 'AWS', level: 80 },
+  { name: 'Tailwind CSS', level: 90 },
 ];
 
 const About = () => {
@@ -53,37 +53,36 @@ const About = () => {
           {/* Text content */}
           <div className={styles.textContent}>
             <p className={styles.intro}>
-              Hello! I'm a passionate software engineer who loves building things that
-              live on the internet. My journey in tech started when I discovered the
-              magic of turning ideas into reality through code.
+              I'm a full stack developer with a fascination for mathematical patterns
+              and tessellations. From NCSSM to UIUC, I've been building software that
+              brings complex ideas to life.
             </p>
 
             <p className={styles.body}>
-              I specialize in creating robust, scalable applications with clean code
-              and thoughtful architecture. Whether it's crafting responsive user
-              interfaces, designing efficient APIs, or architecting cloud infrastructure,
-              I bring the same level of dedication and attention to detail.
+              Currently at Chekhub in Raleigh, I build operations management software
+              that helps businesses optimize their workforce. Previously at IBM, I
+              developed enterprise solutions at scale.
             </p>
 
             <p className={styles.body}>
-              When I'm not coding, you'll find me exploring new technologies,
-              contributing to open-source projects, or sharing knowledge with
-              the developer community.
+              When I'm not shipping features, you'll find me exploring generative art,
+              building interactive tiling visualizations, or diving into the mathematics
+              behind aperiodic patterns like the Einstein monotile.
             </p>
 
             {/* Quick facts */}
             <div className={styles.quickFacts}>
               <div className={styles.fact}>
-                <span className={styles.factNumber}>5+</span>
-                <span className={styles.factLabel}>Years Experience</span>
+                <span className={styles.factNumber}>UIUC</span>
+                <span className={styles.factLabel}>Education</span>
               </div>
               <div className={styles.fact}>
-                <span className={styles.factNumber}>50+</span>
-                <span className={styles.factLabel}>Projects Completed</span>
+                <span className={styles.factNumber}>NCSSM</span>
+                <span className={styles.factLabel}>High School</span>
               </div>
               <div className={styles.fact}>
-                <span className={styles.factNumber}>10k+</span>
-                <span className={styles.factLabel}>Lines of Code</span>
+                <span className={styles.factNumber}>17+</span>
+                <span className={styles.factLabel}>GitHub Repos</span>
               </div>
             </div>
           </div>
@@ -120,10 +119,10 @@ const About = () => {
                 <span className={styles.codeDot} />
               </div>
               <pre className={styles.codeContent}>
-{`const developer = {
-  name: "Your Name",
-  skills: ["TS", "React", "Go"],
-  passion: "Building things",
+{`const akash = {
+  location: "Raleigh, NC",
+  interests: ["tessellations", "math"],
+  current: "Chekhub",
   coffee: true
 };`}
               </pre>

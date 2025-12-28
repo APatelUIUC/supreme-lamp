@@ -1,6 +1,6 @@
 /* ============================================
-   OPENING ANIMATION STYLES
-   Spectacular intro sequence
+   OPENING ANIMATION - TESSELLATION FOLD OUT
+   Mobile-first, snappy triangle tessellation
    ============================================ */
 
 .container {
@@ -9,491 +9,268 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--color-bg-primary);
   z-index: var(--z-animation);
   overflow: hidden;
 }
 
-.background {
+/* ============================================
+   TESSELLATION GRID
+   ============================================ */
+
+.tessellationGrid {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    ellipse at center,
-    var(--color-bg-tertiary) 0%,
-    var(--color-bg-secondary) 40%,
-    var(--color-bg-primary) 100%
-  );
-  z-index: 0;
+  contain: strict;
 }
 
-/* ============================================
-   LOADING INDICATOR
-   ============================================ */
-
-.loadingIndicator {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  opacity: 1;
-  transition: opacity 0.5s ease;
-  z-index: 10;
-}
-
-.container.expanding .loadingIndicator,
-.container.tessellating .loadingIndicator,
-.container.revealing .loadingIndicator,
-.container.complete .loadingIndicator {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.loadingText {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.dots {
-  animation: dotPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-.progressBar {
-  width: 200px;
-  height: 2px;
-  background: var(--color-bg-tertiary);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  background: var(--gradient-primary);
-  border-radius: var(--radius-full);
-  transition: width 0.1s ease-out;
-  box-shadow: 0 0 10px var(--color-blue-accent);
-}
-
-.loadingPercent {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--color-blue-accent);
-}
-
-/* ============================================
-   CENTER ORIGIN TRIANGLE
-   ============================================ */
-
-.centerPoint {
-  position: relative;
-  width: 120px;
-  height: 104px;
-  z-index: 5;
-}
-
-.originTriangle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  animation: originPulse 2s ease-in-out infinite;
-}
-
-.container.loading .originTriangle {
-  animation: originPulse 2s ease-in-out infinite, originSpinIn 1s ease-out;
-}
-
-.container.triangle .originTriangle {
-  animation: originPulse 1.5s ease-in-out infinite, originGrow 0.5s ease-out forwards;
-}
-
-.container.expanding .originTriangle,
-.container.tessellating .originTriangle {
-  animation: originExplode 1s ease-out forwards;
-}
-
-.container.revealing .originTriangle,
-.container.complete .originTriangle {
-  opacity: 0;
-}
-
-.innerTriangle {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  height: 80%;
-  animation: innerRotate 10s linear infinite;
-}
-
-@keyframes originSpinIn {
-  from {
-    transform: rotate(-180deg) scale(0);
-    opacity: 0;
-  }
-  to {
-    transform: rotate(0deg) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes originPulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6))
-            drop-shadow(0 0 40px rgba(255, 107, 53, 0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.9))
-            drop-shadow(0 0 60px rgba(255, 107, 53, 0.6));
-  }
-}
-
-@keyframes originGrow {
-  to {
-    transform: scale(1.5);
-  }
-}
-
-@keyframes originExplode {
-  0% {
-    transform: scale(1.5);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(3);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(5);
-    opacity: 0;
-  }
-}
-
-@keyframes innerRotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ============================================
-   EXPANDING TESSELLATION
-   ============================================ */
-
-.tessellationContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-}
-
-.expandingTriangle {
+/* Individual triangle */
+.triangle {
   position: absolute;
   width: 60px;
-  height: 52px;
-  transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--rotation)) scale(0);
+  height: 52px; /* 60 * sqrt(3)/2 */
+  left: var(--x);
+  top: var(--y);
+  transform-origin: center center;
   opacity: 0;
-  transition: none;
-}
-
-.container.expanding .expandingTriangle,
-.container.tessellating .expandingTriangle {
-  animation: triangleExpand 0.8s ease-out forwards;
+  animation: foldIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   animation-delay: var(--delay);
+  will-change: transform, opacity;
+  contain: layout style;
+  backface-visibility: hidden;
 }
 
-.container.revealing .expandingTriangle {
-  animation: triangleScatter 1s ease-out forwards;
-  animation-delay: calc(var(--delay) * 0.3);
-}
-
-.expandingTriangle.blue {
-  color: var(--color-blue-accent);
-}
-
-.expandingTriangle.orange {
-  color: var(--color-orange-primary);
-}
-
-.expandingTriangle svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 0 10px currentColor);
-}
-
-@keyframes triangleExpand {
-  0% {
-    transform: translate(-50%, -50%) translate(0, 0) rotate(var(--rotation)) scale(0);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--rotation)) scale(var(--scale));
-    opacity: 0.8;
-  }
-}
-
-@keyframes triangleScatter {
-  0% {
-    transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--rotation)) scale(var(--scale));
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(-50%, -50%) translate(calc(var(--x) * 3), calc(var(--y) * 3)) rotate(calc(var(--rotation) + 180deg)) scale(0);
-    opacity: 0;
-  }
-}
-
-/* ============================================
-   RADIAL LINES
-   ============================================ */
-
-.radialLines {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  z-index: 2;
-}
-
-.radialLine {
-  position: absolute;
-  width: 2px;
-  height: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--color-blue-accent) 20%,
-    var(--color-orange-primary) 80%,
-    transparent 100%
-  );
-  transform-origin: top center;
-  opacity: 0;
-}
-
-.container.expanding .radialLine,
-.container.tessellating .radialLine {
-  animation: lineExtend 1.5s ease-out forwards;
-}
-
-.container.revealing .radialLine {
-  animation: lineFade 0.5s ease-out forwards;
-}
-
-@keyframes lineExtend {
-  0% {
-    height: 0;
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.6;
-  }
-  100% {
-    height: 50vh;
-    opacity: 0.3;
-  }
-}
-
-@keyframes lineFade {
-  to {
-    opacity: 0;
-  }
-}
-
-/* ============================================
-   PARTICLES
-   ============================================ */
-
-.particles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  z-index: 4;
-}
-
-.particle {
-  position: absolute;
-  width: var(--size);
-  height: var(--size);
-  background: var(--color-blue-accent);
-  border-radius: 50%;
-  opacity: 0;
-  transform: rotate(var(--angle)) translateX(0);
-}
-
-.particle:nth-child(odd) {
-  background: var(--color-orange-primary);
-}
-
-.container.tessellating .particle,
-.container.revealing .particle {
-  animation: particleBurst var(--duration) ease-out forwards;
-  animation-delay: var(--delay);
-}
-
-@keyframes particleBurst {
-  0% {
-    opacity: 1;
-    transform: rotate(var(--angle)) translateX(0);
-  }
-  100% {
-    opacity: 0;
-    transform: rotate(var(--angle)) translateX(var(--distance));
-  }
-}
-
-/* ============================================
-   REVEAL OVERLAY
-   ============================================ */
-
-.revealOverlay {
+/* Triangle shape using clip-path */
+.triangle::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--color-bg-primary);
-  opacity: 0;
-  z-index: 20;
-  pointer-events: none;
 }
 
-.container.complete .revealOverlay {
-  animation: overlayFadeIn 1s ease-out forwards;
+/* Up-pointing triangle */
+.triangle.up::before {
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
-@keyframes overlayFadeIn {
-  to {
+/* Down-pointing triangle */
+.triangle.down::before {
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+
+/* Blue triangles */
+.triangle.blue::before {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 212, 255, 0.12) 0%,
+    rgba(0, 180, 216, 0.06) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(0, 212, 255, 0.25);
+}
+
+/* Orange triangles */
+.triangle.orange::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 107, 53, 0.18) 0%,
+    rgba(255, 140, 66, 0.08) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 107, 53, 0.35);
+}
+
+/* Gradient triangles - accent pieces */
+.triangle.gradient::before {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.2) 0%,
+    rgba(255, 107, 53, 0.2) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Fold-in animation - triangles fold from flat to visible */
+@keyframes foldIn {
+  0% {
+    opacity: 0;
+    transform: perspective(400px) rotateX(90deg) scale(0.3);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
     opacity: 1;
+    transform: perspective(400px) rotateX(0deg) scale(1);
+  }
+}
+
+/* Down triangles fold the opposite way */
+.triangle.down {
+  animation-name: foldInDown;
+}
+
+@keyframes foldInDown {
+  0% {
+    opacity: 0;
+    transform: perspective(400px) rotateX(-90deg) scale(0.3);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(400px) rotateX(0deg) scale(1);
   }
 }
 
 /* ============================================
-   WELCOME TEXT
+   CENTER GLOW
    ============================================ */
 
-.welcomeText {
+.centerGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 212, 255, 0.5) 0%,
+    rgba(255, 107, 53, 0.25) 30%,
+    transparent 70%
+  );
+  animation: glowPulse 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(4);
+  }
+}
+
+/* ============================================
+   NAME REVEAL
+   ============================================ */
+
+.nameReveal {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 25;
+  z-index: 10;
+  text-align: center;
   opacity: 0;
-  pointer-events: none;
+  animation: nameAppear 0.4s ease-out 0.5s forwards;
 }
 
-.container.revealing .welcomeText,
-.container.complete .welcomeText {
-  animation: textReveal 1s ease-out 0.3s forwards;
-}
-
-.welcomeHello {
-  font-family: var(--font-mono);
-  font-size: var(--text-lg);
-  color: var(--color-blue-accent);
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.welcomeName {
+.nameText {
   font-family: var(--font-display);
-  font-size: var(--text-6xl);
+  font-size: clamp(2.5rem, 10vw, 5rem);
   font-weight: 700;
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #00d4ff 0%, #ff6b35 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  opacity: 0;
-  transform: translateY(20px);
+  filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.4));
+  white-space: nowrap;
 }
 
-.welcomeRole {
-  font-family: var(--font-sans);
-  font-size: var(--text-xl);
-  color: var(--color-text-secondary);
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.container.revealing .welcomeHello,
-.container.complete .welcomeHello {
-  animation: textSlideUp 0.6s ease-out 0.5s forwards;
-}
-
-.container.revealing .welcomeName,
-.container.complete .welcomeName {
-  animation: textSlideUp 0.6s ease-out 0.7s forwards;
-}
-
-.container.revealing .welcomeRole,
-.container.complete .welcomeRole {
-  animation: textSlideUp 0.6s ease-out 0.9s forwards;
-}
-
-@keyframes textReveal {
-  to {
-    opacity: 1;
+@keyframes nameAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+    filter: blur(10px);
   }
-}
-
-@keyframes textSlideUp {
-  to {
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
   }
 }
 
 /* ============================================
-   RESPONSIVE
+   COMPLETE PHASE - FADE OUT
+   ============================================ */
+
+.container.complete {
+  animation: containerFadeOut 0.4s ease-out forwards;
+}
+
+.container.complete .nameReveal {
+  animation: nameExit 0.35s ease-out forwards;
+}
+
+.container.complete .triangle {
+  animation: triangleFadeOut 0.3s ease-out forwards;
+}
+
+@keyframes containerFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes nameExit {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+@keyframes triangleFadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
    ============================================ */
 
 @media (max-width: 768px) {
-  .centerPoint {
-    width: 80px;
-    height: 70px;
+  .triangle {
+    width: 50px;
+    height: 43px;
+    /* Faster animation on mobile */
+    animation-duration: 0.25s;
   }
 
-  .expandingTriangle {
+  .centerGlow {
+    width: 200px;
+    height: 200px;
+    animation-duration: 0.6s;
+  }
+
+  .nameReveal {
+    animation-delay: 0.4s;
+    animation-duration: 0.3s;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .triangle {
     width: 40px;
     height: 35px;
-  }
-
-  .welcomeName {
-    font-size: var(--text-4xl);
-  }
-
-  .welcomeRole {
-    font-size: var(--text-base);
-  }
-
-  .progressBar {
-    width: 150px;
   }
 }
 
@@ -502,20 +279,35 @@
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .originTriangle,
-  .innerTriangle,
-  .expandingTriangle,
-  .radialLine,
-  .particle,
-  .welcomeHello,
-  .welcomeName,
-  .welcomeRole {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
+  .triangle {
+    animation: simpleFadeIn 0.2s ease-out forwards;
   }
 
-  .container.complete .revealOverlay {
-    opacity: 1;
+  .centerGlow {
+    animation: none;
+    opacity: 0;
+  }
+
+  .nameReveal {
+    animation: simpleFadeIn 0.2s ease-out 0.3s forwards;
+  }
+
+  .container.complete {
+    animation: simpleFadeOut 0.2s ease-out forwards;
+  }
+
+  @keyframes simpleFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes simpleFadeOut {
+    to {
+      opacity: 0;
+    }
   }
 }
