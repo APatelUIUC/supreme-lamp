@@ -1,0 +1,343 @@
+/* ============================================
+   ABOUT SECTION STYLES
+   ============================================ */
+
+.section {
+  position: relative;
+  padding: var(--space-24) 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.section.visible .header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sectionNumber {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--color-blue-accent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.titleHighlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.titleLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--border-accent),
+    transparent
+  );
+  max-width: 300px;
+}
+
+/* ============================================
+   CONTENT LAYOUT
+   ============================================ */
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: start;
+}
+
+.textContent {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.6s ease-out 0.2s;
+}
+
+.section.visible .textContent {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.intro {
+  font-size: var(--text-xl);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-6);
+}
+
+.body {
+  font-size: var(--text-base);
+  color: var(--color-text-tertiary);
+  line-height: 1.8;
+  margin-bottom: var(--space-4);
+}
+
+/* Quick facts */
+.quickFacts {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-10);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.factNumber {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.factLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   SKILLS CONTAINER
+   ============================================ */
+
+.skillsContainer {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.6s ease-out 0.3s;
+}
+
+.section.visible .skillsContainer {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.skillsTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
+}
+
+.skillsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.skillItem {
+  opacity: 0;
+  animation: skillFadeIn 0.4s ease-out forwards;
+}
+
+.section.visible .skillItem {
+  animation: skillFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes skillFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.skillHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.skillName {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.skillLevel {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-blue-accent);
+}
+
+.skillBar {
+  height: 6px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.skillProgress {
+  height: 100%;
+  width: 0;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 1s ease-out;
+}
+
+.section.visible .skillProgress {
+  width: var(--skill-level);
+}
+
+/* Code decoration */
+.codeDecor {
+  margin-top: var(--space-8);
+  background: var(--gradient-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.codeHeader {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.codeDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.codeDot:nth-child(1) {
+  background: #ff5f57;
+}
+
+.codeDot:nth-child(2) {
+  background: #febc2e;
+}
+
+.codeDot:nth-child(3) {
+  background: #28c840;
+}
+
+.codeContent {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  padding: var(--space-4);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================
+   BACKGROUND DECORATION
+   ============================================ */
+
+.bgDecoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tessellationPattern {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='52' viewBox='0 0 60 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='none' stroke='%2300d4ff' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E");
+  background-size: 60px 52px;
+  opacity: 0;
+  transition: opacity 1s ease-out 0.5s;
+}
+
+.section.visible .tessellationPattern {
+  opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .quickFacts {
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-16) 0;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  .titleLine {
+    display: none;
+  }
+
+  .intro {
+    font-size: var(--text-lg);
+  }
+
+  .factNumber {
+    font-size: var(--text-3xl);
+  }
+
+  .tessellationPattern {
+    display: none;
+  }
+}
