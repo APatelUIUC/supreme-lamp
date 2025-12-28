@@ -1,6 +1,6 @@
 /* ============================================
-   OPENING ANIMATION - TESSELLATION FOLD OUT
-   Mobile-first, snappy triangle tessellation
+   OPENING ANIMATION - CANVAS TESSELLATION
+   Mathematically perfect triangle tessellation
    ============================================ */
 
 .container {
@@ -9,153 +9,70 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: var(--color-bg-primary);
+  background: #0a0e17;
   z-index: var(--z-animation);
   overflow: hidden;
 }
 
 /* ============================================
-   TESSELLATION GRID
+   CANVAS
    ============================================ */
 
-.tessellationGrid {
+.canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  contain: strict;
-}
-
-/* Individual triangle */
-.triangle {
-  position: absolute;
-  width: 60px;
-  height: 52px; /* 60 * sqrt(3)/2 */
-  left: var(--x);
-  top: var(--y);
-  transform-origin: center center;
-  opacity: 0;
-  animation: foldIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: var(--delay);
-  will-change: transform, opacity;
-  contain: layout style;
-  backface-visibility: hidden;
-}
-
-/* Triangle shape using clip-path */
-.triangle::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* Up-pointing triangle */
-.triangle.up::before {
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-}
-
-/* Down-pointing triangle */
-.triangle.down::before {
-  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-}
-
-/* Blue triangles */
-.triangle.blue::before {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 212, 255, 0.12) 0%,
-    rgba(0, 180, 216, 0.06) 100%
-  );
-  box-shadow: inset 0 0 0 1px rgba(0, 212, 255, 0.25);
-}
-
-/* Orange triangles */
-.triangle.orange::before {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 107, 53, 0.18) 0%,
-    rgba(255, 140, 66, 0.08) 100%
-  );
-  box-shadow: inset 0 0 0 1px rgba(255, 107, 53, 0.35);
-}
-
-/* Gradient triangles - accent pieces */
-.triangle.gradient::before {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 212, 255, 0.2) 0%,
-    rgba(255, 107, 53, 0.2) 100%
-  );
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
-}
-
-/* Fold-in animation - triangles fold from flat to visible */
-@keyframes foldIn {
-  0% {
-    opacity: 0;
-    transform: perspective(400px) rotateX(90deg) scale(0.3);
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    transform: perspective(400px) rotateX(0deg) scale(1);
-  }
-}
-
-/* Down triangles fold the opposite way */
-.triangle.down {
-  animation-name: foldInDown;
-}
-
-@keyframes foldInDown {
-  0% {
-    opacity: 0;
-    transform: perspective(400px) rotateX(-90deg) scale(0.3);
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    transform: perspective(400px) rotateX(0deg) scale(1);
-  }
 }
 
 /* ============================================
-   CENTER GLOW
+   CENTRAL TRIANGLE LOGO
    ============================================ */
 
-.centerGlow {
+.centralLogo {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 300px;
-  height: 300px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    rgba(0, 212, 255, 0.5) 0%,
-    rgba(255, 107, 53, 0.25) 30%,
-    transparent 70%
-  );
-  animation: glowPulse 0.8s ease-out forwards;
-  pointer-events: none;
+  width: 120px;
+  height: 104px;
+  z-index: 5;
+  opacity: 0;
+  animation: logoAppear 0.5s ease-out forwards;
 }
 
-@keyframes glowPulse {
+.logoSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8))
+          drop-shadow(0 0 60px rgba(255, 107, 53, 0.5));
+  animation: logoPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes logoAppear {
   0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+  }
+  60% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(0.2);
+    transform: translate(-50%, -50%) scale(1.2) rotate(10deg);
   }
   100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(4);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8))
+            drop-shadow(0 0 60px rgba(255, 107, 53, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 50px rgba(0, 212, 255, 1))
+            drop-shadow(0 0 80px rgba(255, 107, 53, 0.8));
   }
 }
 
@@ -167,35 +84,59 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + 80px));
   z-index: 10;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   opacity: 0;
-  animation: nameAppear 0.4s ease-out 0.5s forwards;
+  animation: nameAppear 0.5s ease-out 0.4s forwards;
 }
 
 .nameText {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-family: var(--font-display), 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 8vw, 4rem);
   font-weight: 700;
   background: linear-gradient(135deg, #00d4ff 0%, #ff6b35 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.4));
+  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
   white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  color: rgba(168, 178, 209, 0.9);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: taglineAppear 0.4s ease-out 0.7s forwards;
 }
 
 @keyframes nameAppear {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.7);
-    filter: blur(10px);
+    transform: translate(-50%, calc(-50% + 100px)) scale(0.8);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    filter: blur(0);
+    transform: translate(-50%, calc(-50% + 80px)) scale(1);
+  }
+}
+
+@keyframes taglineAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -207,12 +148,12 @@
   animation: containerFadeOut 0.4s ease-out forwards;
 }
 
-.container.complete .nameReveal {
-  animation: nameExit 0.35s ease-out forwards;
+.container.complete .centralLogo {
+  animation: logoExit 0.3s ease-out forwards;
 }
 
-.container.complete .triangle {
-  animation: triangleFadeOut 0.3s ease-out forwards;
+.container.complete .nameReveal {
+  animation: nameExit 0.3s ease-out forwards;
 }
 
 @keyframes containerFadeOut {
@@ -225,20 +166,25 @@
   }
 }
 
-@keyframes nameExit {
+@keyframes logoExit {
   0% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(1.3);
+    transform: translate(-50%, -50%) scale(2);
   }
 }
 
-@keyframes triangleFadeOut {
-  to {
+@keyframes nameExit {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% + 80px)) scale(1);
+  }
+  100% {
     opacity: 0;
+    transform: translate(-50%, calc(-50% + 80px)) scale(1.2);
   }
 }
 
@@ -247,30 +193,35 @@
    ============================================ */
 
 @media (max-width: 768px) {
-  .triangle {
-    width: 50px;
-    height: 43px;
-    /* Faster animation on mobile */
-    animation-duration: 0.25s;
-  }
-
-  .centerGlow {
-    width: 200px;
-    height: 200px;
-    animation-duration: 0.6s;
+  .centralLogo {
+    width: 80px;
+    height: 70px;
   }
 
   .nameReveal {
-    animation-delay: 0.4s;
-    animation-duration: 0.3s;
+    transform: translate(-50%, calc(-50% + 60px));
   }
-}
 
-/* Extra small screens */
-@media (max-width: 480px) {
-  .triangle {
-    width: 40px;
-    height: 35px;
+  @keyframes nameAppear {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 80px)) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, calc(-50% + 60px)) scale(1);
+    }
+  }
+
+  @keyframes nameExit {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, calc(-50% + 60px)) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 60px)) scale(1.2);
+    }
   }
 }
 
@@ -279,16 +230,19 @@
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .triangle {
+  .centralLogo {
     animation: simpleFadeIn 0.2s ease-out forwards;
   }
 
-  .centerGlow {
+  .logoSvg {
     animation: none;
-    opacity: 0;
   }
 
   .nameReveal {
+    animation: simpleFadeIn 0.2s ease-out 0.2s forwards;
+  }
+
+  .tagline {
     animation: simpleFadeIn 0.2s ease-out 0.3s forwards;
   }
 
@@ -296,18 +250,17 @@
     animation: simpleFadeOut 0.2s ease-out forwards;
   }
 
+  .container.complete .centralLogo,
+  .container.complete .nameReveal {
+    animation: simpleFadeOut 0.2s ease-out forwards;
+  }
+
   @keyframes simpleFadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes simpleFadeOut {
-    to {
-      opacity: 0;
-    }
+    to { opacity: 0; }
   }
 }
