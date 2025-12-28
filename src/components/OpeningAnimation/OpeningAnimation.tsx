@@ -21,6 +21,7 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
   const animationRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
   const trianglesRef = useRef<TriangleData[]>([]);
+  const tessellationDataRef = useRef<{ triBase: number; triHeight: number }>({ triBase: 80, triHeight: 80 * Math.sqrt(3) / 2 });
 
   // Color palette
   const colors = {
@@ -186,20 +187,20 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
 
     const elapsed = timestamp - startTimeRef.current;
 
-    // Initialize tessellation if needed
-    let triBase = 80;
-    let triHeight = triBase * Math.sqrt(3) / 2;
-
+    // Initialize tessellation if needed - use CSS pixels, not device pixels
     if (trianglesRef.current.length === 0) {
-      const data = generateTessellation(canvas.width, canvas.height);
+      const cssWidth = window.innerWidth;
+      const cssHeight = window.innerHeight;
+      const data = generateTessellation(cssWidth, cssHeight);
       trianglesRef.current = data.triangles;
-      triBase = data.triBase;
-      triHeight = data.triHeight;
+      tessellationDataRef.current = { triBase: data.triBase, triHeight: data.triHeight };
     }
 
-    // Clear canvas
+    const { triBase, triHeight } = tessellationDataRef.current;
+
+    // Clear canvas - use CSS pixels since context is scaled
     ctx.fillStyle = colors.bgDark;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
     // Update and draw triangles
     trianglesRef.current.forEach((tri) => {
@@ -225,22 +226,24 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
       );
     });
 
-    // Draw center glow
+    // Draw center glow - use CSS pixel coordinates
+    const cssWidth = window.innerWidth;
+    const cssHeight = window.innerHeight;
     const glowProgress = Math.min(1, elapsed / 400);
     const glowSize = 150 + glowProgress * 200;
     const glowOpacity = Math.max(0, 1 - elapsed / 800);
 
     if (glowOpacity > 0) {
       const gradient = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 0,
-        canvas.width / 2, canvas.height / 2, glowSize
+        cssWidth / 2, cssHeight / 2, 0,
+        cssWidth / 2, cssHeight / 2, glowSize
       );
       gradient.addColorStop(0, `rgba(0, 212, 255, ${0.6 * glowOpacity})`);
       gradient.addColorStop(0.3, `rgba(255, 107, 53, ${0.3 * glowOpacity})`);
       gradient.addColorStop(1, 'transparent');
 
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, cssWidth, cssHeight);
     }
 
     // Check if animation should complete
