@@ -201,8 +201,26 @@ const Navigation = ({ visible }: NavigationProps) => {
         </div>
       </nav>
 
+      {/* Mobile Menu Backdrop */}
+      <div
+        className={`${styles.mobileBackdrop} ${mobileMenuOpen ? styles.open : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
       {/* Mobile Menu */}
       <div className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.open : ''}`}>
+        {/* Close Button */}
+        <button
+          className={styles.mobileCloseBtn}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close menu"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
         <ul className={styles.mobileNavList}>
           {navItems.map((item, index) => (
             <li key={item.href} style={{ animationDelay: `${index * 0.1}s` }}>

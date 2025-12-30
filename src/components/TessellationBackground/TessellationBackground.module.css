@@ -1,5 +1,6 @@
 /* ============================================
-   TESSELLATION BACKGROUND STYLES
+   TESSELLATION BACKGROUND
+   Seed → Ripple → Content
    ============================================ */
 
 .container {
@@ -13,7 +14,6 @@
   background: var(--gradient-hero);
 }
 
-/* Ambient canvas for glow effects */
 .ambientCanvas {
   position: absolute;
   top: 0;
@@ -38,17 +38,16 @@
   pointer-events: none;
 }
 
-/* Individual triangle styling */
+/* Triangle base - starts invisible */
 .triangle {
   position: absolute;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: scale(0);
   background: transparent;
-  border: none;
-  box-shadow: none;
+  will-change: transform, opacity;
 }
 
-/* Triangle shape using clip-path - upward pointing (default) */
+/* Triangle shape - upward pointing */
 .triangle::before {
   content: '';
   position: absolute;
@@ -57,10 +56,8 @@
   width: 100%;
   height: 100%;
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-  transition: all 0.4s ease;
 }
 
-/* Stroke outline for triangles */
 .triangle::after {
   content: '';
   position: absolute;
@@ -72,87 +69,126 @@
   z-index: -1;
 }
 
-/* Downward pointing triangle */
+/* Downward pointing */
 .triangle.down::before,
 .triangle.down::after {
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
-/* Blue triangles */
+/* ============================================
+   COLORS
+   ============================================ */
+
 .triangle.blue::before {
   background: linear-gradient(
     180deg,
-    rgba(0, 212, 255, 0.04) 0%,
-    rgba(0, 180, 216, 0.01) 100%
+    rgba(0, 212, 255, 0.06) 0%,
+    rgba(0, 180, 216, 0.02) 100%
   );
 }
-
 .triangle.blue::after {
-  background: rgba(0, 212, 255, 0.12);
+  background: rgba(0, 212, 255, 0.15);
 }
 
-/* Orange triangles */
 .triangle.orange::before {
   background: linear-gradient(
     180deg,
-    rgba(255, 107, 53, 0.05) 0%,
-    rgba(255, 140, 66, 0.02) 100%
+    rgba(255, 107, 53, 0.07) 0%,
+    rgba(255, 140, 66, 0.03) 100%
   );
 }
-
 .triangle.orange::after {
-  background: rgba(255, 107, 53, 0.14);
+  background: rgba(255, 107, 53, 0.18);
 }
 
-/* Gradient triangles */
 .triangle.gradient::before {
   background: linear-gradient(
     135deg,
-    rgba(0, 212, 255, 0.04) 0%,
-    rgba(255, 107, 53, 0.04) 100%
+    rgba(0, 212, 255, 0.06) 0%,
+    rgba(255, 107, 53, 0.06) 100%
   );
 }
-
 .triangle.gradient::after {
   background: linear-gradient(
     135deg,
-    rgba(0, 212, 255, 0.12) 0%,
-    rgba(255, 107, 53, 0.12) 100%
+    rgba(0, 212, 255, 0.15) 0%,
+    rgba(255, 107, 53, 0.15) 100%
   );
 }
 
-/* Layer-based depth effects */
+/* Depth layers */
 .layer0 { z-index: 10; }
 .layer1 { z-index: 8; }
 .layer2 { z-index: 6; }
 .layer3 { z-index: 4; }
 .layer4 { z-index: 2; }
 
-.layer0::before, .layer0::after { opacity: 0.9; }
-.layer1::before, .layer1::after { opacity: 0.7; }
-.layer2::before, .layer2::after { opacity: 0.5; }
-.layer3::before, .layer3::after { opacity: 0.35; }
-.layer4::before, .layer4::after { opacity: 0.2; }
+.layer0::before, .layer0::after { opacity: 1; }
+.layer1::before, .layer1::after { opacity: 0.8; }
+.layer2::before, .layer2::after { opacity: 0.6; }
+.layer3::before, .layer3::after { opacity: 0.4; }
+.layer4::before, .layer4::after { opacity: 0.25; }
 
-/* Animation phases */
-.container.initial .triangle {
+/* ============================================
+   PHASE: SEED
+   Only the seed triangle visible with gentle pulse
+   ============================================ */
+
+.container.seed .triangle {
   opacity: 0;
-  transform: scale(0) rotate(var(--rotation, 0deg));
+  transform: scale(0);
 }
 
-.container.revealing .triangle,
-.container.complete .triangle {
-  animation: triangleReveal 0.8s ease-out forwards;
+/* Seed triangle appears and pulses */
+.container.seed .triangle.seed {
+  animation: seedAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             seedPulse 1s ease-in-out 0.4s infinite;
 }
 
-@keyframes triangleReveal {
+@keyframes seedAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-60deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes seedPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.08);
+    filter: brightness(1.3);
+  }
+}
+
+/* ============================================
+   PHASE: REVEALING
+   Seed stays, others ripple outward
+   ============================================ */
+
+/* Keep seed visible and stop its pulse */
+.container.revealing .triangle.seed {
+  opacity: 1;
+  transform: scale(1);
+  animation: none;
+}
+
+/* Other triangles pop in with delay */
+.container.revealing .triangle:not(.seed) {
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--delay);
+}
+
+@keyframes popIn {
   0% {
     opacity: 0;
     transform: scale(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
   }
   100% {
     opacity: 1;
@@ -160,31 +196,19 @@
   }
 }
 
-/* Hover effects for completed state */
-.container.complete .triangle::before {
-  transition: all 0.4s ease;
-}
+/* ============================================
+   PHASE: COMPLETE
+   Everything locked in place
+   ============================================ */
 
-.container.complete .triangle.blue:hover::before {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 212, 255, 0.2) 0%,
-    rgba(0, 180, 216, 0.1) 100%
-  );
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-}
-
-.container.complete .triangle.orange:hover::before {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 107, 53, 0.2) 0%,
-    rgba(255, 140, 66, 0.1) 100%
-  );
-  box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+.container.complete .triangle {
+  opacity: 1;
+  transform: scale(1);
+  animation: none;
 }
 
 /* ============================================
-   FLOATING PARTICLES
+   PARTICLES
    ============================================ */
 
 .particlesLayer {
@@ -196,16 +220,22 @@
   z-index: 3;
   pointer-events: none;
   overflow: hidden;
+  opacity: 0;
+  transition: opacity 1s ease 0.5s;
+}
+
+.container.complete .particlesLayer {
+  opacity: 1;
 }
 
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
   background: var(--color-blue-accent);
   opacity: 0;
-  animation: particleFloat 10s ease-in-out infinite;
+  animation: particleFloat 12s ease-in-out infinite;
 }
 
 .particle:nth-child(odd) {
@@ -213,8 +243,8 @@
 }
 
 .particle:nth-child(3n) {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 @keyframes particleFloat {
@@ -223,45 +253,32 @@
     transform: translateY(100vh) scale(0);
   }
   10% {
-    opacity: 0.6;
+    opacity: 0.3;
     transform: translateY(80vh) scale(1);
   }
   90% {
-    opacity: 0.6;
+    opacity: 0.3;
     transform: translateY(20vh) scale(1);
   }
-  100% {
-    opacity: 0;
-    transform: translateY(0) scale(0);
-  }
 }
 
 /* ============================================
-   GRID OVERLAY (disabled - was creating square artifacts)
-   ============================================ */
-
-.gridOverlay {
-  display: none;
-}
-
-/* ============================================
-   RESPONSIVE ADJUSTMENTS
+   MOBILE
    ============================================ */
 
 @media (max-width: 768px) {
-  .centralTriangle {
-    width: 100px;
-    height: 87px;
+  .container.seed .triangle.seed {
+    animation: seedAppear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+               seedPulse 1s ease-in-out 0.3s infinite;
+  }
+
+  .container.revealing .triangle:not(.seed) {
+    animation-duration: 0.3s;
   }
 
   .particle {
-    width: 3px;
-    height: 3px;
-  }
-
-  .particle:nth-child(3n) {
-    width: 4px;
-    height: 4px;
+    width: 2px;
+    height: 2px;
   }
 }
 
@@ -270,14 +287,13 @@
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .triangle,
-  .particle {
+  .triangle {
     animation: none !important;
-  }
-
-  .container.revealing .triangle,
-  .container.complete .triangle {
     opacity: 1;
     transform: scale(1);
+  }
+
+  .particle {
+    animation: none !important;
   }
 }

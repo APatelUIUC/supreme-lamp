@@ -246,6 +246,28 @@
 }
 
 /* ============================================
+   MOBILE MENU BACKDROP
+   ============================================ */
+
+.mobileBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-modal) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-base), visibility var(--transition-base);
+}
+
+.mobileBackdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================================
    MOBILE MENU
    ============================================ */
 
@@ -272,6 +294,33 @@
 
 .mobileMenu.open {
   transform: translateX(0);
+}
+
+.mobileCloseBtn {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mobileCloseBtn:hover {
+  color: var(--color-orange-primary);
+  border-color: var(--color-orange-primary);
+}
+
+.mobileCloseBtn svg {
+  width: 24px;
+  height: 24px;
 }
 
 .mobileNavList {
