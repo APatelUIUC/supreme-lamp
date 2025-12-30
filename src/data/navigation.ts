@@ -28,7 +28,7 @@ export const socialLinks: SocialLink[] = [
 
 export const personalInfo = {
   name: 'Akash Patel',
-  title: 'Full Stack Developer',
+  title: 'Full Stack & AI Engineer',
   tagline: 'Crafting tessellations in code and design',
   location: 'Raleigh, NC',
   email: 'akash@patel.dev',

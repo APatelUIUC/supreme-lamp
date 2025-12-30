@@ -322,7 +322,6 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
       {/* Name reveal */}
       <div className={styles.nameReveal}>
         <span className={styles.nameText}>Akash Patel</span>
-        <span className={styles.tagline}>Full Stack Developer</span>
       </div>
     </div>
   );

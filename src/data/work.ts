@@ -4,17 +4,17 @@ export const workExperience: WorkExperience[] = [
   {
     id: 'chekhub',
     company: 'Chekhub',
-    role: 'Full Stack Developer',
+    role: 'Full Stack & AI Engineer',
     period: '2025 - 2026',
     description:
-      'Building the operations management platform that empowers businesses to manage, scale, and optimize their workforce. Working across the full stack on a B2B SaaS product serving data centers, healthcare, telecom, and property management industries.',
+      'Building the operations management platform that empowers businesses to manage, scale, and optimize their workforce. Leading AI integrations using Model Context Protocol (MCP) to enhance platform capabilities.',
     highlights: [
+      'Leading AI integration initiatives using Model Context Protocol (MCP) to connect AI systems with business tools',
       'Developing features for asset management, workforce performance, and customer engagement modules',
       'Building mobile-first responsive interfaces for field workers and managers',
       'Implementing real-time operations dashboards and reporting tools',
-      'Contributing to digital MOPs, SOPs, and training management systems',
     ],
-    technologies: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'AWS'],
+    technologies: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'AWS', 'MCP'],
   },
   {
     id: 'centene',
@@ -22,14 +22,14 @@ export const workExperience: WorkExperience[] = [
     role: 'Software Developer',
     period: '2022 - 2025',
     description:
-      'Developed cloud-native healthcare software handling sensitive PHI data, ensuring HIPAA compliance throughout a major technology migration while meeting international financial reporting standards.',
+      'Developed cloud-native healthcare software and AI-powered solutions handling sensitive PHI data, ensuring HIPAA compliance while pioneering AI adoption across the organization.',
     highlights: [
+      'Pioneered AI integration initiatives, implementing intelligent automation and ML-powered features',
       'Built full-stack features using React, Kafka, MongoDB, and Golang in a cloud-native architecture',
       'Led technology transition initiatives while maintaining strict HIPAA compliance and data security',
-      'Prepared financial compliance reports meeting EU international standards',
       'Served as Scrum Master for the Golang backend team, improving communication and team output',
     ],
-    technologies: ['React', 'Golang', 'Kafka', 'MongoDB', 'AWS'],
+    technologies: ['React', 'Golang', 'Kafka', 'MongoDB', 'AWS', 'AI/ML'],
   },
   {
     id: 'ibm',

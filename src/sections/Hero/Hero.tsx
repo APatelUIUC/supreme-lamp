@@ -79,9 +79,9 @@ const Hero = ({ visible }: HeroProps) => {
           </p>
 
           <p className={styles.description}>
-            Full stack developer at Chekhub, building operations management software.
-            UIUC alum passionate about mathematical patterns, generative art, and
-            bringing tessellations to life through code.
+            Full stack & AI engineer at Chekhub, building operations management software
+            and AI integrations with MCP. UIUC alum passionate about mathematical patterns,
+            artificial intelligence, and building great software.
           </p>
 
           <div className={styles.ctas}>

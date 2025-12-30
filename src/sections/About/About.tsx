@@ -48,15 +48,15 @@ const About = () => {
           {/* Text content */}
           <div className={styles.textContent}>
             <p className={styles.intro}>
-              I'm a full stack developer with a fascination for mathematical patterns
+              I'm a full stack & AI engineer with a fascination for mathematical patterns
               and tessellations. From NCSSM to UIUC, I've been building software that
               brings complex ideas to life.
             </p>
 
             <p className={styles.body}>
               Currently at Chekhub in Raleigh, I build operations management software
-              that helps businesses optimize their workforce. Previously at IBM, I
-              developed enterprise solutions at scale.
+              and lead AI integrations using MCP. Previously at Centene, I developed
+              AI-powered healthcare solutions, and at IBM, I built enterprise software at scale.
             </p>
 
             <p className={styles.body}>
@@ -133,6 +133,10 @@ const About = () => {
         </div>
       </div>
 
+      {/* Background decoration */}
+      <div className={styles.bgDecoration}>
+        <div className={styles.tessellationPattern} />
+      </div>
     </section>
   );
 };
