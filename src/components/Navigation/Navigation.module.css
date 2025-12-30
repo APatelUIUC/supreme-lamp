@@ -55,31 +55,53 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
   text-decoration: none;
   z-index: 10;
 }
 
-.logoTriangle {
+.logoMark {
   width: 40px;
-  height: 35px;
-  transition: transform var(--transition-base);
-  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+  height: 36px;
+  transition: all var(--transition-base);
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
 }
 
-.logo:hover .logoTriangle {
-  transform: rotate(180deg);
-  filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.7));
+.logo:hover .logoMark {
+  filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.5))
+         drop-shadow(0 0 20px rgba(255, 107, 53, 0.4));
+  transform: scale(1.05);
 }
 
-.logoText {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Logo SVG element animations */
+.logoALeft,
+.logoStem,
+.logoCrossbar {
+  transition: all var(--transition-base);
+}
+
+.logo:hover .logoALeft,
+.logo:hover .logoStem {
+  stroke-width: 3.5;
+}
+
+.logo:hover .logoCrossbar {
+  stroke-width: 3;
+}
+
+.logoPFlag {
+  transition: all var(--transition-base);
+}
+
+.logo:hover .logoPFlag {
+  fill-opacity: 0.7;
+}
+
+.logoPFlagOutline {
+  transition: all var(--transition-base);
+}
+
+.logo:hover .logoPFlagOutline {
+  stroke-width: 3;
 }
 
 /* ============================================
@@ -137,9 +159,18 @@
   width: 100%;
 }
 
-.navNumber {
+.navTriangle {
+  width: 8px;
+  height: 8px;
   color: var(--color-blue-accent);
-  font-size: var(--text-xs);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.navLink:hover .navTriangle,
+.navLink.active .navTriangle {
+  color: var(--color-orange-primary);
+  transform: translateX(2px);
 }
 
 /* ============================================
@@ -269,9 +300,9 @@
 
 .mobileNavList a {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-3);
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   color: var(--color-text-secondary);
@@ -283,8 +314,14 @@
   color: var(--color-blue-accent);
 }
 
-.mobileNavList .navNumber {
-  font-size: var(--text-sm);
+.mobileNavList .navTriangle {
+  width: 12px;
+  height: 12px;
+}
+
+.mobileNavList a:hover .navTriangle {
+  color: var(--color-orange-primary);
+  transform: translateX(4px);
 }
 
 .mobileSocialLinks {

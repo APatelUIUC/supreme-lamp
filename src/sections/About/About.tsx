@@ -1,16 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
 import styles from './About.module.css';
 
-const skills = [
-  { name: 'React', level: 95 },
-  { name: 'TypeScript', level: 92 },
-  { name: 'Node.js', level: 90 },
-  { name: 'Next.js', level: 88 },
-  { name: 'PostgreSQL', level: 85 },
-  { name: 'Python', level: 82 },
-  { name: 'AWS', level: 80 },
-  { name: 'Tailwind CSS', level: 90 },
-];
+const toolbox = {
+  daily: ['TypeScript', 'React', 'Node.js', 'PostgreSQL'],
+  ship: ['Next.js', 'Python', 'AWS', 'Tailwind'],
+  exploring: ['Rust', 'WebGL', 'Deno'],
+};
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -81,34 +76,41 @@ const About = () => {
                 <span className={styles.factLabel}>High School</span>
               </div>
               <div className={styles.fact}>
-                <span className={styles.factNumber}>17+</span>
-                <span className={styles.factLabel}>GitHub Repos</span>
+                <span className={styles.factNumber}>8+</span>
+                <span className={styles.factLabel}>Years Experience</span>
               </div>
             </div>
           </div>
 
-          {/* Skills visualization */}
+          {/* Toolbox */}
           <div className={styles.skillsContainer}>
-            <h3 className={styles.skillsTitle}>Technical Skills</h3>
-            <div className={styles.skillsList}>
-              {skills.map((skill, index) => (
-                <div
-                  key={skill.name}
-                  className={styles.skillItem}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className={styles.skillHeader}>
-                    <span className={styles.skillName}>{skill.name}</span>
-                    <span className={styles.skillLevel}>{skill.level}%</span>
-                  </div>
-                  <div className={styles.skillBar}>
-                    <div
-                      className={styles.skillProgress}
-                      style={{ '--skill-level': `${skill.level}%` } as React.CSSProperties}
-                    />
-                  </div>
-                </div>
-              ))}
+            <h3 className={styles.skillsTitle}>Toolbox</h3>
+
+            <div className={styles.toolboxSection}>
+              <span className={styles.toolboxLabel}>Daily drivers</span>
+              <div className={styles.tagList}>
+                {toolbox.daily.map((tool) => (
+                  <span key={tool} className={styles.tag}>{tool}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.toolboxSection}>
+              <span className={styles.toolboxLabel}>Also ship with</span>
+              <div className={styles.tagList}>
+                {toolbox.ship.map((tool) => (
+                  <span key={tool} className={styles.tagSecondary}>{tool}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.toolboxSection}>
+              <span className={styles.toolboxLabel}>Currently exploring</span>
+              <div className={styles.tagList}>
+                {toolbox.exploring.map((tool) => (
+                  <span key={tool} className={styles.tagExploring}>{tool}</span>
+                ))}
+              </div>
             </div>
 
             {/* Decorative code block */}
@@ -123,7 +125,7 @@ const About = () => {
   location: "Raleigh, NC",
   interests: ["tessellations", "math"],
   current: "Chekhub",
-  coffee: true
+  seeking: "the hat"
 };`}
               </pre>
             </div>
@@ -131,10 +133,6 @@ const About = () => {
         </div>
       </div>
 
-      {/* Background decoration */}
-      <div className={styles.bgDecoration}>
-        <div className={styles.tessellationPattern} />
-      </div>
     </section>
   );
 };

@@ -78,10 +78,10 @@ const Contact = () => {
         {/* Main content */}
         <div className={styles.content}>
           <p className={styles.description}>
-            I'm currently open to new opportunities and always excited to connect
-            with fellow developers, potential collaborators, or anyone who wants
-            to say hello. Whether you have a project in mind, a question, or just
-            want to chat about tech — my inbox is always open.
+            I'm always excited to connect with fellow developers, potential
+            collaborators, or anyone who wants to say hello. Whether you have a
+            project in mind, a question, or just want to chat about tessellations
+            and code — my inbox is always open.
           </p>
 
           {/* CTA button */}

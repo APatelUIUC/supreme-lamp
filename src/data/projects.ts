@@ -68,8 +68,7 @@ export const projects: Project[] = [
       'Enhanced JavaScript library for representing, manipulating, and drawing periodic tilings with improved mobile support and additional tiling patterns.',
     technologies: ['JavaScript', 'Canvas API', 'Mathematics'],
     githubUrl: 'https://github.com/APatelUIUC/mytactile',
-    // TODO: Add Vercel deployment URL when available
-    liveUrl: 'https://github.com/APatelUIUC/mytactile',
+    liveUrl: 'https://mytactile.vercel.app/',
     featured: false,
     category: 'open-source',
   },
@@ -92,11 +91,8 @@ export const getFeaturedProjects = (): Project[] =>
 export const getProjectsByCategory = (category: Project['category']): Project[] =>
   projects.filter((p) => p.category === category);
 
-// Get projects for hexagonal grid display
-// Returns [centerProject, ...outerRingProjects] (7 total)
-// Center: 3D Voronoi (most visually impressive)
-export const getHexGridProjects = (): Project[] => {
-  const center = projects.find((p) => p.id === '3d-voronoi')!;
-  const outer = projects.filter((p) => p.id !== '3d-voronoi');
-  return [center, ...outer];
+// Get the 3 featured projects for display
+export const getDisplayProjects = (): Project[] => {
+  const ids = ['3d-voronoi', 'tiling-music', 'tactile-js'];
+  return ids.map((id) => projects.find((p) => p.id === id)!);
 };

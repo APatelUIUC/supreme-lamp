@@ -65,17 +65,13 @@ const Hero = ({ visible }: HeroProps) => {
 
         {/* Main content */}
         <div className={styles.textContent}>
-          <span className={styles.greeting}>
-            <span className={styles.greetingBracket}>&lt;</span>
-            Hello, World
-            <span className={styles.greetingBracket}>/&gt;</span>
-          </span>
-
           <h1 className={styles.name}>
             I'm <span className={styles.nameHighlight}>{personalInfo.name}</span>
           </h1>
 
-          <h2 className={styles.title}>{personalInfo.title}</h2>
+          <h2 className={styles.title}>
+            {personalInfo.title} in the <span className={styles.triangleHighlight}>Triangle</span>
+          </h2>
 
           <p className={styles.tagline}>
             {typedText}
@@ -107,19 +103,54 @@ const Hero = ({ visible }: HeroProps) => {
           <div className={styles.decorDot} />
         </div>
 
-        {/* Floating code snippets */}
+        {/* Floating terminal */}
         <div className={styles.floatingCode}>
           <div className={styles.codeBlock}>
-            <span className={styles.codeKeyword}>const</span>{' '}
-            <span className={styles.codeVar}>tessellate</span> = {'{'}
-            <br />
-            &nbsp;&nbsp;<span className={styles.codeProp}>pattern</span>:{' '}
-            <span className={styles.codeString}>'penrose'</span>,
-            <br />
-            &nbsp;&nbsp;<span className={styles.codeProp}>infinite</span>:{' '}
-            <span className={styles.codeNumber}>true</span>
-            <br />
-            {'}'};
+            <div className={styles.terminalHeader}>
+              <span className={styles.terminalDot} data-color="red" />
+              <span className={styles.terminalDot} data-color="yellow" />
+              <span className={styles.terminalDot} data-color="green" />
+              <span className={styles.terminalTitle}>tessellate.ts</span>
+            </div>
+            <div className={styles.codeContent}>
+              <span className={styles.codeKeyword}>function*</span>{' '}
+              <span className={styles.codeFn}>tessellate</span>
+              <span className={styles.codeParen}>(</span>
+              <span className={styles.codeParam}>n</span>
+              <span className={styles.codeParen}>)</span>{' '}
+              <span className={styles.codeParen}>{'{'}</span>
+              <br />
+              <span className={styles.codeIndent} />
+              <span className={styles.codeKeyword}>for</span>{' '}
+              <span className={styles.codeParen}>(</span>
+              <span className={styles.codeKeyword}>let</span>{' '}
+              <span className={styles.codeVar}>i</span>{' '}
+              <span className={styles.codeOp}>=</span>{' '}
+              <span className={styles.codeNumber}>0</span>
+              <span className={styles.codeOp}>;</span>{' '}
+              <span className={styles.codeVar}>i</span>{' '}
+              <span className={styles.codeOp}>&lt;</span>{' '}
+              <span className={styles.codeParam}>n</span>
+              <span className={styles.codeOp}>;</span>{' '}
+              <span className={styles.codeVar}>i</span>
+              <span className={styles.codeOp}>++</span>
+              <span className={styles.codeParen}>)</span>
+              <br />
+              <span className={styles.codeIndent} />
+              <span className={styles.codeIndent} />
+              <span className={styles.codeKeyword}>yield</span>{' '}
+              <span className={styles.codeFn}>triangle</span>
+              <span className={styles.codeParen}>(</span>
+              <span className={styles.codeVar}>i</span>{' '}
+              <span className={styles.codeOp}>*</span>{' '}
+              <span className={styles.codeNumber}>60</span>
+              <span className={styles.codeParen}>)</span>
+              <br />
+              <span className={styles.codeParen}>{'}'}</span>
+              <br />
+              <br />
+              <span className={styles.codeComment}>// ▲ ▽ ▲ ▽ ▲ ▽ ▲</span>
+            </div>
           </div>
         </div>
 

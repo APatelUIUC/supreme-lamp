@@ -167,10 +167,9 @@
   left: 0;
   top: 0;
   width: 3px;
-  height: 48px;
   background: var(--gradient-primary);
   border-radius: var(--radius-full);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, height 0.3s ease;
   box-shadow: var(--shadow-glow-blue);
 }
 

@@ -161,62 +161,73 @@
   margin-bottom: var(--space-6);
 }
 
-.skillsList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+/* Toolbox sections */
+.toolboxSection {
+  margin-bottom: var(--space-5);
 }
 
-.skillItem {
-  opacity: 0;
-  animation: skillFadeIn 0.4s ease-out forwards;
-}
-
-.section.visible .skillItem {
-  animation: skillFadeIn 0.4s ease-out forwards;
-}
-
-@keyframes skillFadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-.skillHeader {
-  display: flex;
-  justify-content: space-between;
+.toolboxLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
   margin-bottom: var(--space-2);
 }
 
-.skillName {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
-.skillLevel {
+.tag {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   color: var(--color-blue-accent);
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
 }
 
-.skillBar {
-  height: 6px;
-  background: var(--color-bg-tertiary);
-  border-radius: var(--radius-full);
-  overflow: hidden;
+.tag:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: rgba(0, 212, 255, 0.5);
 }
 
-.skillProgress {
-  height: 100%;
-  width: 0;
-  background: var(--gradient-primary);
-  border-radius: var(--radius-full);
-  transition: width 1s ease-out;
+.tagSecondary {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
 }
 
-.section.visible .skillProgress {
-  width: var(--skill-level);
+.tagSecondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.tagExploring {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: #ff8a5c;
+  background: rgba(255, 107, 53, 0.15);
+  border: 1px solid rgba(255, 107, 53, 0.4);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.tagExploring:hover {
+  background: rgba(255, 107, 53, 0.22);
+  border-color: rgba(255, 107, 53, 0.6);
 }
 
 /* Code decoration */
@@ -265,36 +276,6 @@
 }
 
 /* ============================================
-   BACKGROUND DECORATION
-   ============================================ */
-
-.bgDecoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.tessellationPattern {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='52' viewBox='0 0 60 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='none' stroke='%2300d4ff' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E");
-  background-size: 60px 52px;
-  opacity: 0;
-  transition: opacity 1s ease-out 0.5s;
-}
-
-.section.visible .tessellationPattern {
-  opacity: 1;
-}
-
-/* ============================================
    RESPONSIVE
    ============================================ */
 
@@ -335,9 +316,5 @@
 
   .factNumber {
     font-size: var(--text-3xl);
-  }
-
-  .tessellationPattern {
-    display: none;
   }
 }

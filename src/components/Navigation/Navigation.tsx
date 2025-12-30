@@ -81,18 +81,73 @@ const Navigation = ({ visible }: NavigationProps) => {
         <div className={styles.container}>
           {/* Logo */}
           <a href="#home" className={styles.logo} onClick={() => handleNavClick('#home')}>
-            <div className={styles.logoTriangle}>
-              <svg viewBox="0 0 40 35" fill="none">
+            <div className={styles.logoMark}>
+              <svg viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <linearGradient id="navLogoGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#00d4ff" />
+                    <stop offset="100%" stopColor="#ff6b35" />
+                  </linearGradient>
+                  <linearGradient id="navLogoFlagFill" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#ff6b35" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#ff6b35" stopOpacity="0.1" />
+                  </linearGradient>
+                  {/* Vertical gradient for shared stem to bridge both colors */}
+                  <linearGradient id="navLogoVerticalGradient" x1="0" y1="2" x2="0" y2="38" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stopColor="#00d4ff" />
                     <stop offset="100%" stopColor="#ff6b35" />
                   </linearGradient>
                 </defs>
-                <polygon points="20,0 40,35 0,35" fill="url(#logoGradient)" />
+
+                {/* P - Triangular flag/bowl fill - angled to mirror A's diagonal */}
+                <polygon
+                  points="22,2 38,22 22,22"
+                  fill="url(#navLogoFlagFill)"
+                  className={styles.logoPFlag}
+                />
+
+                {/* A - Left diagonal (left edge of half-triangle) */}
+                <line
+                  x1="22" y1="2"
+                  x2="1.5" y2="38"
+                  stroke="#00d4ff"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className={styles.logoALeft}
+                />
+
+                {/* A - Crossbar (lifted and clearly visible) */}
+                <line
+                  x1="10.6" y1="22"
+                  x2="22" y2="22"
+                  stroke="#00d4ff"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className={styles.logoCrossbar}
+                />
+
+                {/* P - Flag outline - angled to mirror A's diagonal */}
+                <polyline
+                  points="22,2 38,22 22,22"
+                  stroke="#ff6b35"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                  className={styles.logoPFlagOutline}
+                />
+
+                {/* Shared vertical stem (right edge of A + stem of P) */}
+                <line
+                  x1="22" y1="2"
+                  x2="22" y2="38"
+                  stroke="url(#navLogoVerticalGradient)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className={styles.logoStem}
+                />
               </svg>
             </div>
-            <span className={styles.logoText}>AP</span>
           </a>
 
           {/* Desktop Navigation */}
@@ -108,7 +163,9 @@ const Navigation = ({ visible }: NavigationProps) => {
                   }}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <span className={styles.navNumber}>0{index + 1}.</span>
+                  <svg className={styles.navTriangle} viewBox="0 0 10 10" fill="currentColor">
+                    <polygon points="0,0 10,5 0,10" />
+                  </svg>
                   {item.label}
                 </a>
               </li>
@@ -156,7 +213,9 @@ const Navigation = ({ visible }: NavigationProps) => {
                   handleNavClick(item.href);
                 }}
               >
-                <span className={styles.navNumber}>0{index + 1}.</span>
+                <svg className={styles.navTriangle} viewBox="0 0 10 10" fill="currentColor">
+                  <polygon points="0,0 10,5 0,10" />
+                </svg>
                 {item.label}
               </a>
             </li>

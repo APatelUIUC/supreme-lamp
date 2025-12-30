@@ -16,7 +16,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     platform: 'LinkedIn',
-    url: 'https://linkedin.com/in/akashpateluiuc',
+    url: 'https://www.linkedin.com/in/akashpatelcs/',
     icon: 'linkedin',
   },
   {

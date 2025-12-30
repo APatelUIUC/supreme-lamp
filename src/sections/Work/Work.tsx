@@ -7,6 +7,8 @@ const Work = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const tabListRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [indicatorStyle, setIndicatorStyle] = useState({ top: 0, height: 48 });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -24,6 +26,19 @@ const Work = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  // Calculate indicator position based on actual tab dimensions
+  useEffect(() => {
+    const activeTab = tabRefs.current[activeIndex];
+    if (activeTab && tabListRef.current) {
+      const listRect = tabListRef.current.getBoundingClientRect();
+      const tabRect = activeTab.getBoundingClientRect();
+      setIndicatorStyle({
+        top: tabRect.top - listRect.top,
+        height: tabRect.height,
+      });
+    }
+  }, [activeIndex]);
 
   const activeWork = workExperience[activeIndex];
 
@@ -57,12 +72,16 @@ const Work = () => {
             {/* Tab indicator */}
             <div
               className={styles.tabIndicator}
-              style={{ transform: `translateY(${activeIndex * 48}px)` }}
+              style={{
+                transform: `translateY(${indicatorStyle.top}px)`,
+                height: `${indicatorStyle.height}px`,
+              }}
             />
 
             {workExperience.map((work, index) => (
               <button
                 key={work.id}
+                ref={(el) => { tabRefs.current[index] = el; }}
                 className={`${styles.tab} ${activeIndex === index ? styles.active : ''}`}
                 onClick={() => setActiveIndex(index)}
               >
@@ -108,19 +127,6 @@ const Work = () => {
           </div>
         </div>
 
-        {/* Timeline decoration */}
-        <div className={styles.timeline}>
-          {workExperience.map((_, index) => (
-            <div
-              key={index}
-              className={`${styles.timelineNode} ${index === activeIndex ? styles.active : ''} ${index < activeIndex ? styles.past : ''}`}
-              onClick={() => setActiveIndex(index)}
-            >
-              <div className={styles.timelineDot} />
-              {index < workExperience.length - 1 && <div className={styles.timelineLine} />}
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Decorative triangles */}

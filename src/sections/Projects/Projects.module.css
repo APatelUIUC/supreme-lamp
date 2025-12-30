@@ -1,12 +1,11 @@
 /* ============================================
-   PROJECTS SECTION - HEXAGONAL GRID
+   PROJECTS SECTION
    ============================================ */
 
 .section {
   position: relative;
   padding: var(--space-24) 0;
   min-height: 100vh;
-  overflow: hidden;
 }
 
 .container {
@@ -79,330 +78,247 @@
 }
 
 /* ============================================
-   HEXAGONAL GRID - PROPER HONEYCOMB
-   Using flat-top hexagons for cleaner tiling
+   PROJECTS GRID
    ============================================ */
 
-.hexGrid {
-  --hex-width: 220px;
-  --hex-height: calc(var(--hex-width) * 0.866); /* √3/2 ratio for flat-top */
-  --hex-margin: 4px;
-
-  position: relative;
-  width: 100%;
-  height: calc(var(--hex-height) * 3 + var(--hex-margin) * 4);
-  margin: var(--space-8) auto;
-  max-width: 800px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
 }
 
 /* ============================================
-   HEXAGON BASE STYLES
+   PROJECT CARD
    ============================================ */
 
-.hexagon {
-  position: absolute;
-  width: var(--hex-width);
-  height: var(--hex-height);
-  text-decoration: none;
-  cursor: pointer;
+.card {
+  position: relative;
+  background: linear-gradient(
+    145deg,
+    rgba(19, 26, 43, 0.6) 0%,
+    rgba(10, 14, 23, 0.8) 100%
+  );
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   opacity: 0;
-  transform: scale(0.8);
-  transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.4s ease-out,
-    z-index 0s;
+  transform: translateY(40px);
+  animation: cardFadeIn 0.6s ease-out forwards;
+  transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
-.section.visible .hexagon {
-  opacity: 1;
-  transform: scale(1);
-  animation: hexAppear 0.5s ease-out forwards;
-  animation-delay: var(--delay);
+.section.visible .card {
+  animation: cardFadeIn 0.6s ease-out forwards;
 }
 
-@keyframes hexAppear {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
+@keyframes cardFadeIn {
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
-.hexagon:hover {
-  transform: scale(1.06);
-  z-index: 20;
+.card:hover {
+  transform: translateY(-8px);
 }
 
-/* ============================================
-   HEXAGON POSITIONING - 7 HEX HONEYCOMB
-   Flat-top hexagon layout
-   ============================================ */
-
-/* Center hexagon (index 0) */
-.hexagon[data-index="0"] {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-}
-
-.section.visible .hexagon[data-index="0"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="0"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* Top-left (index 1) */
-.hexagon[data-index="1"] {
-  left: calc(50% - var(--hex-width) * 0.75 - var(--hex-margin));
-  top: calc(50% - var(--hex-height) - var(--hex-margin));
-  transform: translate(-50%, -50%);
-}
-
-.section.visible .hexagon[data-index="1"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="1"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* Top-right (index 2) */
-.hexagon[data-index="2"] {
-  left: calc(50% + var(--hex-width) * 0.75 + var(--hex-margin));
-  top: calc(50% - var(--hex-height) - var(--hex-margin));
-  transform: translate(-50%, -50%);
-}
-
-.section.visible .hexagon[data-index="2"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="2"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* Right (index 3) */
-.hexagon[data-index="3"] {
-  left: calc(50% + var(--hex-width) * 1.5 + var(--hex-margin) * 2);
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.section.visible .hexagon[data-index="3"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="3"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* Bottom-right (index 4) */
-.hexagon[data-index="4"] {
-  left: calc(50% + var(--hex-width) * 0.75 + var(--hex-margin));
-  top: calc(50% + var(--hex-height) + var(--hex-margin));
-  transform: translate(-50%, -50%);
-}
-
-.section.visible .hexagon[data-index="4"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="4"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* Bottom-left (index 5) */
-.hexagon[data-index="5"] {
-  left: calc(50% - var(--hex-width) * 0.75 - var(--hex-margin));
-  top: calc(50% + var(--hex-height) + var(--hex-margin));
-  transform: translate(-50%, -50%);
-}
-
-.section.visible .hexagon[data-index="5"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="5"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* Left (index 6) */
-.hexagon[data-index="6"] {
-  left: calc(50% - var(--hex-width) * 1.5 - var(--hex-margin) * 2);
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.section.visible .hexagon[data-index="6"] {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hexagon[data-index="6"]:hover {
-  transform: translate(-50%, -50%) scale(1.06);
-}
-
-/* ============================================
-   HEXAGON INNER STRUCTURE
-   ============================================ */
-
-.hexInner {
-  width: 100%;
-  height: 100%;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+/* Orange accent line at top */
+.cardAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
   background: linear-gradient(
-    135deg,
-    rgba(13, 19, 33, 0.95) 0%,
-    rgba(10, 14, 23, 0.98) 100%
+    90deg,
+    transparent 0%,
+    var(--color-orange-primary) 20%,
+    var(--color-orange-bright) 50%,
+    var(--color-orange-primary) 80%,
+    transparent 100%
   );
-  border: none;
-  position: relative;
-  transition: all 0.3s ease;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
 }
 
-/* Gradient border effect using pseudo-element */
-.hexInner::before {
-  content: '';
+.card:hover .cardAccent {
+  opacity: 1;
+}
+
+/* Animated border */
+.cardBorder {
   position: absolute;
   inset: 0;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  border-radius: var(--radius-lg);
+  padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(0, 212, 255, 0.15) 0%,
-    rgba(255, 107, 53, 0.08) 100%
+    rgba(0, 212, 255, 0.2) 0%,
+    rgba(255, 107, 53, 0.1) 50%,
+    rgba(0, 212, 255, 0.2) 100%
   );
-  z-index: -1;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
   transition: all 0.3s ease;
 }
 
-.hexagon:hover .hexInner::before {
+.card:hover .cardBorder {
   background: linear-gradient(
     135deg,
-    rgba(0, 212, 255, 0.4) 0%,
-    rgba(255, 107, 53, 0.25) 100%
+    rgba(0, 212, 255, 0.5) 0%,
+    rgba(255, 107, 53, 0.3) 50%,
+    rgba(0, 212, 255, 0.5) 100%
   );
 }
 
-/* Inner background (creates border effect) */
-.hexInner::after {
-  content: '';
+/* Mouse-following glow */
+.cardGlow {
   position: absolute;
-  inset: 2px;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  background: linear-gradient(
-    180deg,
-    rgba(13, 19, 33, 0.97) 0%,
-    rgba(10, 14, 23, 0.99) 100%
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 212, 255, 0.08) 0%,
+    transparent 70%
   );
-  z-index: 0;
-}
-
-/* Center hexagon special styling */
-.hexCenter .hexInner::before {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 212, 255, 0.25) 0%,
-    rgba(255, 107, 53, 0.15) 100%
-  );
-}
-
-/* ============================================
-   HEXAGON CONTENT
-   ============================================ */
-
-.hexContent {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-4);
-  z-index: 1;
-  transition: all 0.3s ease;
-}
-
-.hexContent.hovered {
+  transform: translate(-50%, -50%);
   opacity: 0;
-  transform: translateY(-10px);
-}
-
-.hexTitle {
-  font-family: var(--font-display);
-  font-size: var(--text-base);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.3;
-  margin: 0;
-  padding: 0 var(--space-2);
-  transition: color 0.3s ease;
-}
-
-.hexagon:hover .hexTitle {
-  color: var(--color-blue-accent);
-}
-
-/* ============================================
-   HEXAGON HOVER OVERLAY
-   ============================================ */
-
-.hexOverlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-4);
-  z-index: 2;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-.hexOverlay.visible {
+.card:hover .cardGlow {
   opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
 }
 
-.hexDescription {
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  line-height: 1.4;
-  margin: 0 0 var(--space-2) 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  padding: 0 var(--space-1);
+/* ============================================
+   CARD CONTENT
+   ============================================ */
+
+.cardContent {
+  position: relative;
+  padding: var(--space-8);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 320px;
 }
 
-.hexCta {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
+}
+
+.cardNumber {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--color-blue-accent);
+  font-size: var(--text-sm);
+  color: var(--color-orange-primary);
+  font-weight: 600;
+}
+
+.githubLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--color-text-tertiary);
+  border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 
-.hexCta svg {
-  width: 10px;
-  height: 10px;
+.githubLink:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.githubLink svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Card text */
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+  transition: color 0.2s ease;
+}
+
+.card:hover .cardTitle {
+  color: var(--color-blue-accent);
+}
+
+.cardDescription {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  line-height: 1.7;
+  margin-bottom: var(--space-6);
+  flex-grow: 1;
+}
+
+/* Tech stack */
+.techList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin-top: auto;
+}
+
+.techList li {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-3);
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+}
+
+.card:hover .techList li {
+  border-color: rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+/* View Project CTA */
+.viewProject {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-orange-primary);
+  margin-top: var(--space-4);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.card:hover .viewProject {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.viewProject svg {
+  width: 14px;
+  height: 14px;
   transition: transform 0.2s ease;
 }
 
-.hexagon:hover .hexCta svg {
-  transform: translate(2px, -2px);
+.card:hover .viewProject svg {
+  transform: translate(3px, -3px);
 }
 
 /* ============================================
@@ -415,7 +331,7 @@
   margin-top: var(--space-16);
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.6s ease-out 0.5s;
+  transition: all 0.6s ease-out 0.4s;
 }
 
 .section.visible .viewMore {
@@ -431,22 +347,22 @@
   font-size: var(--text-sm);
   color: var(--color-blue-accent);
   text-decoration: none;
-  padding: var(--space-3) var(--space-5);
+  padding: var(--space-3) var(--space-6);
   border: 1px solid var(--color-blue-accent);
   border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .viewMoreLink:hover {
-  background: var(--color-blue-soft);
+  background: rgba(0, 212, 255, 0.1);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-glow-blue);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
 }
 
 .viewMoreLink svg {
   width: 16px;
   height: 16px;
-  transition: transform var(--transition-fast);
+  transition: transform 0.2s ease;
 }
 
 .viewMoreLink:hover svg {
@@ -458,8 +374,14 @@
    ============================================ */
 
 @media (max-width: 1024px) {
-  .hexGrid {
-    --hex-width: 180px;
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card:last-child {
+    grid-column: 1 / -1;
+    max-width: 500px;
+    justify-self: center;
   }
 }
 
@@ -486,62 +408,20 @@
     display: none;
   }
 
-  .hexGrid {
-    --hex-width: 140px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
-    height: auto;
-    max-width: 320px;
+  .grid {
+    grid-template-columns: 1fr;
   }
 
-  .hexagon {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    transform: none !important;
-    width: 100%;
-    height: 0;
-    padding-bottom: 86.6%;
+  .card:last-child {
+    max-width: none;
   }
 
-  .section.visible .hexagon {
-    transform: none !important;
+  .cardContent {
+    padding: var(--space-6);
+    min-height: auto;
   }
 
-  .hexagon:hover {
-    transform: scale(1.02) !important;
-  }
-
-  .hexCenter {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: var(--hex-width);
-    padding-bottom: calc(var(--hex-width) * 0.866);
-  }
-
-  .hexInner {
-    position: absolute;
-    inset: 0;
-  }
-
-  .hexTitle {
-    font-size: var(--text-sm);
-  }
-
-  .hexDescription {
-    -webkit-line-clamp: 3;
-    font-size: 10px;
-  }
-}
-
-/* ============================================
-   RESPONSIVE - SMALL MOBILE
-   ============================================ */
-
-@media (max-width: 480px) {
-  .hexGrid {
-    --hex-width: 120px;
-    max-width: 280px;
+  .cardTitle {
+    font-size: var(--text-lg);
   }
 }
