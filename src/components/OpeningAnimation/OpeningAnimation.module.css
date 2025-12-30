@@ -1,0 +1,266 @@
+/* ============================================
+   OPENING ANIMATION - CANVAS TESSELLATION
+   Mathematically perfect triangle tessellation
+   ============================================ */
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0a0e17;
+  z-index: var(--z-animation);
+  overflow: hidden;
+}
+
+/* ============================================
+   CANVAS
+   ============================================ */
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   CENTRAL TRIANGLE LOGO
+   ============================================ */
+
+.centralLogo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 104px;
+  z-index: 5;
+  opacity: 0;
+  animation: logoAppear 0.6s ease-out 0.8s forwards;
+}
+
+.logoSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8))
+          drop-shadow(0 0 60px rgba(255, 107, 53, 0.5));
+  animation: logoPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes logoAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8))
+            drop-shadow(0 0 60px rgba(255, 107, 53, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 50px rgba(0, 212, 255, 1))
+            drop-shadow(0 0 80px rgba(255, 107, 53, 0.8));
+  }
+}
+
+/* ============================================
+   NAME REVEAL
+   ============================================ */
+
+.nameReveal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 80px));
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: nameAppear 0.6s ease-out 1.2s forwards;
+}
+
+.nameText {
+  font-family: var(--font-display), 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #00d4ff 0%, #ff6b35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  color: rgba(168, 178, 209, 0.9);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: taglineAppear 0.5s ease-out 1.5s forwards;
+}
+
+@keyframes nameAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 100px)) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% + 80px)) scale(1);
+  }
+}
+
+@keyframes taglineAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   COMPLETE PHASE - FADE OUT
+   ============================================ */
+
+.container.complete {
+  animation: containerFadeOut 0.6s ease-out forwards;
+}
+
+.container.complete .centralLogo {
+  animation: logoExit 0.3s ease-out forwards;
+}
+
+.container.complete .nameReveal {
+  animation: nameExit 0.3s ease-out forwards;
+}
+
+@keyframes containerFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes logoExit {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+@keyframes nameExit {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% + 80px)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 80px)) scale(1.2);
+  }
+}
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .centralLogo {
+    width: 80px;
+    height: 70px;
+  }
+
+  .nameReveal {
+    transform: translate(-50%, calc(-50% + 60px));
+  }
+
+  @keyframes nameAppear {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 80px)) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, calc(-50% + 60px)) scale(1);
+    }
+  }
+
+  @keyframes nameExit {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, calc(-50% + 60px)) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 60px)) scale(1.2);
+    }
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .centralLogo {
+    animation: simpleFadeIn 0.2s ease-out forwards;
+  }
+
+  .logoSvg {
+    animation: none;
+  }
+
+  .nameReveal {
+    animation: simpleFadeIn 0.2s ease-out 0.2s forwards;
+  }
+
+  .tagline {
+    animation: simpleFadeIn 0.2s ease-out 0.3s forwards;
+  }
+
+  .container.complete {
+    animation: simpleFadeOut 0.2s ease-out forwards;
+  }
+
+  .container.complete .centralLogo,
+  .container.complete .nameReveal {
+    animation: simpleFadeOut 0.2s ease-out forwards;
+  }
+
+  @keyframes simpleFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes simpleFadeOut {
+    to { opacity: 0; }
+  }
+}

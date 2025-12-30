@@ -1,0 +1,427 @@
+/* ============================================
+   PROJECTS SECTION
+   ============================================ */
+
+.section {
+  position: relative;
+  padding: var(--space-24) 0;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.section.visible .header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sectionNumber {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--color-blue-accent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.titleHighlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.titleLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border-accent), transparent);
+  max-width: 300px;
+}
+
+.subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-text-tertiary);
+  max-width: 600px;
+  margin-bottom: var(--space-12);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out 0.1s;
+}
+
+.section.visible .subtitle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   PROJECTS GRID
+   ============================================ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+/* ============================================
+   PROJECT CARD
+   ============================================ */
+
+.card {
+  position: relative;
+  background: linear-gradient(
+    145deg,
+    rgba(19, 26, 43, 0.6) 0%,
+    rgba(10, 14, 23, 0.8) 100%
+  );
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: cardFadeIn 0.6s ease-out forwards;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.section.visible .card {
+  animation: cardFadeIn 0.6s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+/* Orange accent line at top */
+.cardAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-orange-primary) 20%,
+    var(--color-orange-bright) 50%,
+    var(--color-orange-primary) 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .cardAccent {
+  opacity: 1;
+}
+
+/* Animated border */
+.cardBorder {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.2) 0%,
+    rgba(255, 107, 53, 0.1) 50%,
+    rgba(0, 212, 255, 0.2) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.card:hover .cardBorder {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.5) 0%,
+    rgba(255, 107, 53, 0.3) 50%,
+    rgba(0, 212, 255, 0.5) 100%
+  );
+}
+
+/* Mouse-following glow */
+.cardGlow {
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 212, 255, 0.08) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover .cardGlow {
+  opacity: 1;
+}
+
+/* ============================================
+   CARD CONTENT
+   ============================================ */
+
+.cardContent {
+  position: relative;
+  padding: var(--space-8);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 320px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
+}
+
+.cardNumber {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-orange-primary);
+  font-weight: 600;
+}
+
+.githubLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--color-text-tertiary);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.githubLink:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.githubLink svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Card text */
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+  transition: color 0.2s ease;
+}
+
+.card:hover .cardTitle {
+  color: var(--color-blue-accent);
+}
+
+.cardDescription {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  line-height: 1.7;
+  margin-bottom: var(--space-6);
+  flex-grow: 1;
+}
+
+/* Tech stack */
+.techList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin-top: auto;
+}
+
+.techList li {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-3);
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+}
+
+.card:hover .techList li {
+  border-color: rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+/* View Project CTA */
+.viewProject {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-orange-primary);
+  margin-top: var(--space-4);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.card:hover .viewProject {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.viewProject svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover .viewProject svg {
+  transform: translate(3px, -3px);
+}
+
+/* ============================================
+   VIEW MORE LINK
+   ============================================ */
+
+.viewMore {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out 0.4s;
+}
+
+.section.visible .viewMore {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.viewMoreLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-blue-accent);
+  text-decoration: none;
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid var(--color-blue-accent);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.viewMoreLink:hover {
+  background: rgba(0, 212, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+}
+
+.viewMoreLink svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.viewMoreLink:hover svg {
+  transform: translate(3px, -3px);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card:last-child {
+    grid-column: 1 / -1;
+    max-width: 500px;
+    justify-self: center;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-16) 0;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  .titleLine {
+    display: none;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card:last-child {
+    max-width: none;
+  }
+
+  .cardContent {
+    padding: var(--space-6);
+    min-height: auto;
+  }
+
+  .cardTitle {
+    font-size: var(--text-lg);
+  }
+}

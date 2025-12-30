@@ -1,0 +1,382 @@
+/* ============================================
+   CONTACT SECTION STYLES
+   ============================================ */
+
+.section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-24) 0;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   BACKGROUND EFFECTS
+   ============================================ */
+
+.bgEffects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gradientOrb1 {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 212, 255, 0.1) 0%,
+    transparent 70%
+  );
+  animation: orbPulse 8s ease-in-out infinite;
+}
+
+.gradientOrb2 {
+  position: absolute;
+  bottom: 20%;
+  right: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 107, 53, 0.08) 0%,
+    transparent 70%
+  );
+  animation: orbPulse 10s ease-in-out infinite reverse;
+}
+
+.gridPattern {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 212, 255, 0.02) 1px,
+    transparent 1px
+  );
+  background-size: 100% 50px;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+.section.visible .gridPattern {
+  opacity: 1;
+}
+
+@keyframes orbPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+
+.header {
+  margin-bottom: var(--space-8);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.section.visible .header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sectionNumber {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--color-blue-accent);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-6xl);
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out 0.2s;
+}
+
+.section.visible .content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.description {
+  font-size: var(--text-lg);
+  color: var(--color-text-tertiary);
+  line-height: 1.8;
+  margin-bottom: var(--space-10);
+}
+
+/* ============================================
+   CTA BUTTON
+   ============================================ */
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-10);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-bg-primary);
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.ctaButton:hover::before {
+  left: 100%;
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+}
+
+.ctaButton svg {
+  width: 22px;
+  height: 22px;
+  transition: transform var(--transition-fast);
+}
+
+.ctaButton:hover svg {
+  transform: translate(3px, -3px);
+}
+
+/* ============================================
+   SOCIAL SECTION
+   ============================================ */
+
+.socialSection {
+  margin-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out 0.4s;
+}
+
+.section.visible .socialSection {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.socialLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: var(--space-6);
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.socialLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  opacity: 0;
+  animation: socialFadeIn 0.4s ease-out forwards;
+}
+
+.section.visible .socialLink {
+  animation: socialFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes socialFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.socialLink:hover {
+  color: var(--color-blue-accent);
+  border-color: var(--color-blue-accent);
+  background: var(--color-blue-soft);
+  transform: translateY(-3px);
+}
+
+.socialLink svg {
+  width: 24px;
+  height: 24px;
+}
+
+.socialLink span {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+/* ============================================
+   DECORATIVE TRIANGLE
+   ============================================ */
+
+.decorTriangle {
+  position: absolute;
+  bottom: 15%;
+  right: 10%;
+  width: 200px;
+  height: 174px;
+  opacity: 0;
+  animation: triangleSpin 20s linear infinite;
+  transition: opacity 1s ease-out 0.6s;
+  z-index: 1;
+}
+
+.section.visible .decorTriangle {
+  opacity: 1;
+}
+
+@keyframes triangleSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: var(--space-8) 0;
+  z-index: 3;
+}
+
+.footerContent {
+  text-align: center;
+}
+
+.footerText {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.footerText span {
+  color: var(--color-blue-accent);
+}
+
+.footerCopyright {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .title {
+    font-size: var(--text-4xl);
+  }
+
+  .description {
+    font-size: var(--text-base);
+  }
+
+  .ctaButton {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-base);
+  }
+
+  .socialLinks {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .socialLink {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .decorTriangle {
+    display: none;
+  }
+}
