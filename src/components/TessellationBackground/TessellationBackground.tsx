@@ -10,6 +10,7 @@ interface Triangle {
   delay: number;
   colorType: 'blue' | 'orange' | 'gradient';
   layer: number;
+  distFromCenter: number;
 }
 
 interface TessellationBackgroundProps {
@@ -24,8 +25,7 @@ const TessellationBackground = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
   const [triangles, setTriangles] = useState<Triangle[]>([]);
-  const [isRevealing, setIsRevealing] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
+  const [phase, setPhase] = useState<'seed' | 'revealing' | 'complete'>('seed');
   const mousePosRef = useRef({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const startTimeRef = useRef<number>(0);
@@ -86,6 +86,7 @@ const TessellationBackground = ({
           delay,
           colorType,
           layer: Math.floor(normalizedDist * 5),
+          distFromCenter,
         });
       }
     }
@@ -93,7 +94,19 @@ const TessellationBackground = ({
     return triangleList;
   }, []);
 
-  // Initialize triangles - only once
+  // Find the seed triangle (closest to center)
+  const seedTriangleId = useMemo(() => {
+    if (triangles.length === 0) return null;
+    let closest = triangles[0];
+    for (const tri of triangles) {
+      if (tri.distFromCenter < closest.distFromCenter) {
+        closest = tri;
+      }
+    }
+    return closest.id;
+  }, [triangles]);
+
+  // Initialize triangles and run animation sequence
   useEffect(() => {
     if (initializedRef.current) return;
     initializedRef.current = true;
@@ -101,23 +114,26 @@ const TessellationBackground = ({
     const tris = generateTessellation();
     setTriangles(tris);
 
-    // Start revealing immediately
-    requestAnimationFrame(() => {
-      setIsRevealing(true);
-    });
+    // Timeline:
+    // 0ms: Seed appears
+    // 1000ms: Start revealing (ripple out)
+    // 2000ms: Complete
 
-    // Mark complete after ripple finishes (500ms spread + 400ms animation)
     setTimeout(() => {
-      setIsComplete(true);
+      setPhase('revealing');
     }, 1000);
+
+    setTimeout(() => {
+      setPhase('complete');
+    }, 2000);
   }, [generateTessellation]);
 
-  // Call onAnimationComplete when isComplete becomes true
+  // Call onAnimationComplete when phase becomes complete
   useEffect(() => {
-    if (isComplete) {
+    if (phase === 'complete') {
       onAnimationComplete?.();
     }
-  }, [isComplete, onAnimationComplete]);
+  }, [phase, onAnimationComplete]);
 
   // Canvas for ambient glow
   useEffect(() => {
@@ -164,7 +180,7 @@ const TessellationBackground = ({
       });
 
       // Mouse glow when interactive
-      if (interactive && isComplete) {
+      if (interactive && phase === 'complete') {
         const mousePos = mousePosRef.current;
         const mouseGlow = ctx.createRadialGradient(
           mousePos.x, mousePos.y, 0,
@@ -191,7 +207,7 @@ const TessellationBackground = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [interactive, isComplete]);
+  }, [interactive, phase]);
 
   // Mouse tracking
   useEffect(() => {
@@ -219,7 +235,7 @@ const TessellationBackground = ({
   return (
     <div
       ref={containerRef}
-      className={`${styles.container} ${isRevealing ? styles.revealing : ''} ${isComplete ? styles.complete : ''}`}
+      className={`${styles.container} ${styles[phase]}`}
     >
       <canvas ref={canvasRef} className={styles.ambientCanvas} />
 
@@ -232,6 +248,7 @@ const TessellationBackground = ({
               ${styles[triangle.colorType]}
               ${styles[`layer${triangle.layer}`]}
               ${!triangle.isUp ? styles.down : ''}
+              ${triangle.id === seedTriangleId ? styles.seed : ''}
             `}
             style={{
               left: `${triangle.x}px`,
