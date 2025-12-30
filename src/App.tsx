@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import OpeningAnimation from './components/OpeningAnimation';
 import TessellationBackground from './components/TessellationBackground';
 import Navigation from './components/Navigation';
 import Hero from './sections/Hero';
@@ -11,12 +10,12 @@ import './styles/variables.css';
 import './styles/global.css';
 
 function App() {
-  const [showIntro, setShowIntro] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   useEffect(() => {
-    // Lock scroll during intro
-    if (showIntro) {
+    // Lock scroll during intro animation
+    if (!animationComplete) {
       document.body.classList.add('no-scroll');
     } else {
       document.body.classList.remove('no-scroll');
@@ -25,26 +24,23 @@ function App() {
     return () => {
       document.body.classList.remove('no-scroll');
     };
-  }, [showIntro]);
+  }, [animationComplete]);
 
-  const handleIntroComplete = () => {
-    // Short delay before hiding intro
+  const handleAnimationComplete = () => {
+    setAnimationComplete(true);
+    // Slight delay before showing content for smooth overlap
     setTimeout(() => {
-      setShowIntro(false);
-      // Slight delay before showing content for smooth transition
-      setTimeout(() => {
-        setContentVisible(true);
-      }, 200);
-    }, 200);
+      setContentVisible(true);
+    }, 100);
   };
 
   return (
     <div className="app">
-      {/* Opening Animation */}
-      {showIntro && <OpeningAnimation onComplete={handleIntroComplete} />}
-
-      {/* Background with tessellation */}
-      {!showIntro && <TessellationBackground interactive={true} />}
+      {/* Tessellation background - always present, handles its own animation */}
+      <TessellationBackground
+        interactive={animationComplete}
+        onAnimationComplete={handleAnimationComplete}
+      />
 
       {/* Navigation */}
       <Navigation visible={contentVisible} />
@@ -53,7 +49,7 @@ function App() {
       <main
         style={{
           opacity: contentVisible ? 1 : 0,
-          transition: 'opacity 0.8s ease-out',
+          transition: 'opacity 0.6s ease-out',
           position: 'relative',
           zIndex: 10,
         }}
