@@ -34,8 +34,8 @@ function App() {
       // Slight delay before showing content for smooth transition
       setTimeout(() => {
         setContentVisible(true);
-      }, 300);
-    }, 500);
+      }, 200);
+    }, 200);
   };
 
   return (

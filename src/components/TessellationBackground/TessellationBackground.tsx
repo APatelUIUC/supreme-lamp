@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './TessellationBackground.module.css';
 
 interface Triangle {
@@ -6,7 +6,7 @@ interface Triangle {
   x: number;
   y: number;
   size: number;
-  rotation: number;
+  isUp: boolean;
   delay: number;
   colorType: 'blue' | 'orange' | 'gradient';
   layer: number;
@@ -26,43 +26,49 @@ const TessellationBackground = ({
   const animationRef = useRef<number | null>(null);
   const [triangles, setTriangles] = useState<Triangle[]>([]);
   const [animationPhase, setAnimationPhase] = useState<
-    'initial' | 'expanding' | 'tessellating' | 'complete'
+    'initial' | 'revealing' | 'complete'
   >('initial');
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mousePosRef = useRef({ x: 0, y: 0 });
   const startTimeRef = useRef<number>(0);
 
-  // Generate tessellation pattern
+  // Generate tessellation pattern with correct geometry
   const generateTessellation = useCallback(() => {
     const triangleList: Triangle[] = [];
     const baseSize = 80;
-    const height = baseSize * Math.sqrt(3) / 2;
+    const triHeight = baseSize * Math.sqrt(3) / 2;
 
-    // Calculate grid dimensions to cover screen
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    const cols = Math.ceil(screenWidth / baseSize) + 4;
-    const rows = Math.ceil(screenHeight / height) + 4;
+
+    // Calculate how many triangles we need
+    const colsNeeded = Math.ceil(screenWidth / (baseSize / 2)) + 4;
+    const rowsNeeded = Math.ceil(screenHeight / triHeight) + 4;
 
     let id = 0;
     const centerX = screenWidth / 2;
     const centerY = screenHeight / 2;
+    const maxDist = Math.sqrt(centerX * centerX + centerY * centerY);
 
-    for (let row = -2; row < rows; row++) {
-      for (let col = -2; col < cols; col++) {
+    // Create a proper tessellation grid
+    for (let row = -2; row < rowsNeeded; row++) {
+      for (let col = -2; col < colsNeeded; col++) {
+        // Determine if this triangle points up or down
         const isUpward = (row + col) % 2 === 0;
-        const x = col * (baseSize / 2) - baseSize;
-        const y = row * height - height;
+
+        // Position calculation for proper tessellation:
+        // - Each column is half a baseSize apart
+        // - Each row is one triangle height apart
+        const x = col * (baseSize / 2);
+        const y = row * triHeight;
 
         // Calculate distance from center for animation delay
         const distFromCenter = Math.sqrt(
-          Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)
+          Math.pow(x + baseSize / 2 - centerX, 2) +
+          Math.pow(y + triHeight / 2 - centerY, 2)
         );
-        const maxDist = Math.sqrt(
-          Math.pow(screenWidth, 2) + Math.pow(screenHeight, 2)
-        ) / 2;
-        const normalizedDist = distFromCenter / maxDist;
+        const normalizedDist = Math.min(1, distFromCenter / maxDist);
 
-        // Determine color based on position and randomness
+        // Color distribution
         const colorRandom = Math.random();
         let colorType: 'blue' | 'orange' | 'gradient';
         if (colorRandom < 0.7) {
@@ -78,8 +84,8 @@ const TessellationBackground = ({
           x,
           y,
           size: baseSize,
-          rotation: isUpward ? 0 : 180,
-          delay: normalizedDist * 1500 + Math.random() * 200,
+          isUp: isUpward,
+          delay: normalizedDist * 1200 + Math.random() * 150,
           colorType,
           layer: Math.floor(normalizedDist * 5),
         });
@@ -94,13 +100,12 @@ const TessellationBackground = ({
     const tris = generateTessellation();
     setTriangles(tris);
 
-    // Start animation sequence
-    setTimeout(() => setAnimationPhase('expanding'), 500);
-    setTimeout(() => setAnimationPhase('tessellating'), 1500);
+    // Start animation sequence - simplified to 3 phases
+    setTimeout(() => setAnimationPhase('revealing'), 300);
     setTimeout(() => {
       setAnimationPhase('complete');
       onAnimationComplete?.();
-    }, 4000);
+    }, 2500);
 
     const handleResize = () => {
       const newTris = generateTessellation();
@@ -156,8 +161,9 @@ const TessellationBackground = ({
         ctx.fill();
       });
 
-      // Interactive mouse glow
+      // Interactive mouse glow - use ref to avoid re-renders
       if (interactive && animationPhase === 'complete') {
+        const mousePos = mousePosRef.current;
         const mouseGlow = ctx.createRadialGradient(
           mousePos.x, mousePos.y, 0,
           mousePos.x, mousePos.y, 200
@@ -183,19 +189,30 @@ const TessellationBackground = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [interactive, animationPhase, mousePos]);
+  }, [interactive, animationPhase]);
 
-  // Mouse tracking
+  // Mouse tracking - use ref to avoid re-renders
   useEffect(() => {
     if (!interactive) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [interactive]);
+
+  // Generate particle data once to avoid recalculation on re-render
+  const particles = useMemo(() =>
+    Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 8 + Math.random() * 7,
+    })), []
+  );
 
   return (
     <div
@@ -205,61 +222,34 @@ const TessellationBackground = ({
       {/* Canvas for ambient effects */}
       <canvas ref={canvasRef} className={styles.ambientCanvas} />
 
-      {/* Central starting triangle */}
-      <div className={`${styles.centralTriangle} ${animationPhase !== 'initial' ? styles.hidden : ''}`}>
-        <svg viewBox="0 0 100 87" className={styles.centralTriangleSvg}>
-          <defs>
-            <linearGradient id="centralGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00d4ff" />
-              <stop offset="100%" stopColor="#ff6b35" />
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <polygon
-            points="50,0 100,87 0,87"
-            fill="url(#centralGradient)"
-            filter="url(#glow)"
-          />
-        </svg>
-      </div>
-
       {/* Tessellation triangles */}
       <div className={styles.tessellationLayer}>
         {triangles.map((triangle) => (
           <div
             key={triangle.id}
-            className={`${styles.triangle} ${styles[triangle.colorType]} ${styles[`layer${triangle.layer}`]}`}
+            className={`${styles.triangle} ${styles[triangle.colorType]} ${styles[`layer${triangle.layer}`]} ${!triangle.isUp ? styles.down : ''}`}
             style={{
               left: `${triangle.x}px`,
               top: `${triangle.y}px`,
               width: `${triangle.size}px`,
               height: `${triangle.size * Math.sqrt(3) / 2}px`,
-              transform: `rotate(${triangle.rotation}deg)`,
               animationDelay: `${triangle.delay}ms`,
-              '--mouse-x': `${mousePos.x}px`,
-              '--mouse-y': `${mousePos.y}px`,
-            } as React.CSSProperties}
+            }}
           />
         ))}
       </div>
 
       {/* Floating particles */}
       <div className={styles.particlesLayer}>
-        {Array.from({ length: 30 }).map((_, i) => (
+        {particles.map((particle) => (
           <div
-            key={`particle-${i}`}
+            key={`particle-${particle.id}`}
             className={styles.particle}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 10}s`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`,
             }}
           />
         ))}

@@ -229,9 +229,9 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
     // Draw center glow - use CSS pixel coordinates
     const cssWidth = window.innerWidth;
     const cssHeight = window.innerHeight;
-    const glowProgress = Math.min(1, elapsed / 400);
-    const glowSize = 150 + glowProgress * 200;
-    const glowOpacity = Math.max(0, 1 - elapsed / 800);
+    const glowProgress = Math.min(1, elapsed / 600);
+    const glowSize = 150 + glowProgress * 250;
+    const glowOpacity = Math.max(0, 1 - elapsed / 2000);
 
     if (glowOpacity > 0) {
       const gradient = ctx.createRadialGradient(
@@ -246,10 +246,10 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
       ctx.fillRect(0, 0, cssWidth, cssHeight);
     }
 
-    // Check if animation should complete
-    if (elapsed > 1400) {
+    // Check if animation should complete - extended to 2500ms to appreciate triangles
+    if (elapsed > 2500) {
       setPhase('complete');
-      setTimeout(onComplete, 400);
+      setTimeout(onComplete, 600);
       return;
     }
 

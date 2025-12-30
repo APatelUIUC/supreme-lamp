@@ -92,7 +92,7 @@ const Navigation = ({ visible }: NavigationProps) => {
                 <polygon points="20,0 40,35 0,35" fill="url(#logoGradient)" />
               </svg>
             </div>
-            <span className={styles.logoText}>YN</span>
+            <span className={styles.logoText}>AP</span>
           </a>
 
           {/* Desktop Navigation */}

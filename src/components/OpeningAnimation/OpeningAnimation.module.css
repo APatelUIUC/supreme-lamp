@@ -39,7 +39,7 @@
   height: 104px;
   z-index: 5;
   opacity: 0;
-  animation: logoAppear 0.5s ease-out forwards;
+  animation: logoAppear 0.6s ease-out 0.8s forwards;
 }
 
 .logoSvg {
@@ -92,7 +92,7 @@
   align-items: center;
   gap: 8px;
   opacity: 0;
-  animation: nameAppear 0.5s ease-out 0.4s forwards;
+  animation: nameAppear 0.6s ease-out 1.2s forwards;
 }
 
 .nameText {
@@ -115,7 +115,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   opacity: 0;
-  animation: taglineAppear 0.4s ease-out 0.7s forwards;
+  animation: taglineAppear 0.5s ease-out 1.5s forwards;
 }
 
 @keyframes nameAppear {
@@ -145,7 +145,7 @@
    ============================================ */
 
 .container.complete {
-  animation: containerFadeOut 0.4s ease-out forwards;
+  animation: containerFadeOut 0.6s ease-out forwards;
 }
 
 .container.complete .centralLogo {
