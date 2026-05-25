@@ -5,16 +5,11 @@ import styles from './LatentAtlasPreview.module.css';
 
 interface LatentAtlasPreviewProps {
   href: string;
-  width?: number;
-  height?: number;
 }
 
 // Visual budget (logical px). Canvas internals scale by DPR.
 const W = 400;
 const VIZ_H = 220;        // canvas viz area
-const TEXT_H = 110;        // text overlay area
-const FULL_H = VIZ_H + TEXT_H;
-
 const PADDING = 24;        // viz inset (room for labels at edges)
 
 // Animation timing
@@ -73,11 +68,7 @@ const computeTargets = (axis: Axis): Array<[number, number]> =>
     traitToY(w.traits[axis.yTrait]),
   ]);
 
-const LatentAtlasPreview = ({
-  href,
-  width = W,
-  height = FULL_H,
-}: LatentAtlasPreviewProps) => {
+const LatentAtlasPreview = ({ href }: LatentAtlasPreviewProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLAnchorElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -269,19 +260,9 @@ const LatentAtlasPreview = ({
         for (const entry of entries) {
           const wasVisible = isVisibleRef.current;
           isVisibleRef.current = entry.isIntersecting;
-          if (!wasVisible && entry.isIntersecting && !rafRef.current) {
-            // resume rAF
-            const canvas = canvasRef.current;
-            const ctx = canvas?.getContext('2d');
-            if (canvas && ctx) {
-              rafRef.current = requestAnimationFrame(function step(now) {
-                // Just re-enter the main loop by re-mounting effectively
-                // (the drawFrame closure isn't in scope here, but the
-                // next-frame check will pick it up via the existing effect.)
-                rafRef.current = null;
-              });
-            }
-          }
+          // (The animation loop checks isVisibleRef each frame and
+          // pauses/resumes itself — no need to re-prime rAF here.)
+          void wasVisible;
         }
       },
       { threshold: 0 }

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './TessellationBackground.module.css';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+void useMemo;
 
 interface Triangle {
   id: number;
@@ -23,12 +25,9 @@ const TessellationBackground = ({
   interactive = true,
 }: TessellationBackgroundProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | null>(null);
   const [triangles, setTriangles] = useState<Triangle[]>([]);
   const [phase, setPhase] = useState<'seed' | 'revealing' | 'complete'>('seed');
-  const mousePosRef = useRef({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const startTimeRef = useRef<number>(0);
   const initializedRef = useRef(false);
 
   // Generate tessellation pattern
@@ -137,32 +136,9 @@ const TessellationBackground = ({
     }
   }, [phase, onAnimationComplete]);
 
-  // (Removed: ambient canvas glow and mouse-follow glow — felt like noise
-  // against the refined cream/navy palette. Wireframe is the only background
-  // element now.)
-
-  // Mouse tracking
-  useEffect(() => {
-    if (!interactive) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mousePosRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [interactive]);
-
-  // Particles
-  const particles = useMemo(() =>
-    Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay: Math.random() * 5,
-      duration: 10 + Math.random() * 8,
-    })), []
-  );
+  // (Removed: ambient canvas glow, mouse-follow glow, and floating particles.
+  // The wireframe is the only background element now.)
+  void interactive;
 
   return (
     <div
