@@ -105,6 +105,6 @@ export const getProjectsByCategory = (category: Project['category']): Project[] 
 
 // Get the featured projects for display in the Projects section
 export const getDisplayProjects = (): Project[] => {
-  const ids = ['sae-explorer', '3d-voronoi', 'tiling-music', 'tactile-js'];
+  const ids = ['sae-explorer', '3d-voronoi', 'tactile-js'];
   return ids.map((id) => projects.find((p) => p.id === id)!);
 };

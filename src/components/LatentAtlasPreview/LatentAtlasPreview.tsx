@@ -298,9 +298,8 @@ const LatentAtlasPreview = ({
       rel="noopener noreferrer"
       className={styles.card}
       aria-label="Latent Atlas — open project in a new tab"
-      style={{ width: `${width}px` }}
     >
-      <div className={styles.viz} style={{ height: `${VIZ_H}px` }}>
+      <div className={styles.viz}>
         <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
         <span className={styles.eyebrow}>featured · interactive essay</span>
       </div>

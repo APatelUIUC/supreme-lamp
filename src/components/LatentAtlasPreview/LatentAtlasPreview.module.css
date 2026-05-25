@@ -5,6 +5,8 @@
 .card {
   display: block;
   position: relative;
+  width: 100%;
+  max-width: 400px;
   text-decoration: none;
   color: inherit;
   border-radius: 14px;
@@ -34,6 +36,8 @@
 .viz {
   position: relative;
   width: 100%;
+  /* 400 logical × 220 logical = 20:11 — let CSS keep aspect when card shrinks */
+  aspect-ratio: 20 / 11;
   background: #0E0A06;
   overflow: hidden;
 }
