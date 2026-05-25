@@ -1,355 +1,195 @@
 /* ============================================
-   ABOUT SECTION STYLES
+   ABOUT SECTION — Editorial single-column.
+   Bio narrative is the primary content. Toolbox is typeset
+   reference material underneath, not chips or cards.
    ============================================ */
 
 .section {
-  position: relative;
   padding: var(--space-24) 0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-.container {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
   position: relative;
-  z-index: 2;
-}
-
-/* ============================================
-   SECTION HEADER
-   ============================================ */
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-12);
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease-out;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-.section.visible .header {
+.section.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.sectionNumber {
-  font-family: var(--font-mono);
-  font-size: var(--text-lg);
-  color: var(--color-blue-accent);
-}
-
-.title {
-  font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.titleHighlight {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.titleLine {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    var(--border-accent),
-    transparent
-  );
-  max-width: 300px;
-}
-
-/* ============================================
-   CONTENT LAYOUT
-   ============================================ */
-
-.content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-16);
-  align-items: start;
-}
-
-.textContent {
-  opacity: 0;
-  transform: translateX(-30px);
-  transition: all 0.6s ease-out 0.2s;
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
   position: relative;
   isolation: isolate;
 }
 
-.section.visible .textContent {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Cloud-like soft backdrop. No hard edges — gentle dimming around text. */
-.textContent::before {
+/* Soft reading backdrop so the wireframe never competes with body text.
+   Keeps the cloud-shaped soft edges from earlier work. */
+.container::before {
   content: '';
   position: absolute;
   inset: -3rem -4rem;
-  background: rgba(8, 17, 31, 0.45);
+  background: rgba(8, 17, 31, 0.42);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: -1;
   mask-image: radial-gradient(
     ellipse at center,
     black 0%,
-    rgba(0, 0, 0, 0.85) 25%,
-    rgba(0, 0, 0, 0.45) 55%,
-    rgba(0, 0, 0, 0.15) 80%,
+    rgba(0, 0, 0, 0.85) 30%,
+    rgba(0, 0, 0, 0.4) 65%,
     transparent 100%
   );
   -webkit-mask-image: radial-gradient(
     ellipse at center,
     black 0%,
-    rgba(0, 0, 0, 0.85) 25%,
-    rgba(0, 0, 0, 0.45) 55%,
-    rgba(0, 0, 0, 0.15) 80%,
+    rgba(0, 0, 0, 0.85) 30%,
+    rgba(0, 0, 0, 0.4) 65%,
     transparent 100%
   );
 }
 
-@media (max-width: 768px) {
-  .textContent::before {
-    inset: -2rem -2rem;
-  }
-}
-
-.intro {
-  font-size: var(--text-xl);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin-bottom: var(--space-6);
-}
-
-.body {
-  font-size: var(--text-base);
-  color: var(--color-text-tertiary);
-  line-height: 1.8;
-  margin-bottom: var(--space-4);
-}
-
-/* Quick facts */
-.quickFacts {
-  display: flex;
-  gap: var(--space-8);
-  margin-top: var(--space-10);
-  padding-top: var(--space-8);
-  border-top: 1px solid var(--border-subtle);
-}
-
-.fact {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.factNumber {
-  font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: 700;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.factLabel {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
 /* ============================================
-   SKILLS CONTAINER
+   HEADER
    ============================================ */
 
-.skillsContainer {
-  opacity: 0;
-  transform: translateX(30px);
-  transition: all 0.6s ease-out 0.3s;
+.header {
+  margin-bottom: var(--space-10);
 }
 
-.section.visible .skillsContainer {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.skillsTitle {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-6);
-}
-
-/* Toolbox sections */
-.toolboxSection {
-  margin-bottom: var(--space-5);
-}
-
-.toolboxLabel {
+.sectionNumber {
   display: block;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  text-transform: lowercase;
-  letter-spacing: 0.5px;
-  margin-bottom: var(--space-2);
-}
-
-.tagList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.tag {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  letter-spacing: 0.24em;
   color: var(--color-blue-accent);
-  background: rgba(242, 235, 221, 0.1);
-  border: 1px solid rgba(242, 235, 221, 0.3);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
 }
 
-.tag:hover {
-  background: rgba(242, 235, 221, 0.15);
-  border-color: rgba(242, 235, 221, 0.5);
-}
-
-.tagSecondary {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: 500;
+  letter-spacing: -0.025em;
   color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-}
-
-.tagSecondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.tagExploring {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: #ff8a5c;
-  background: rgba(242, 235, 221, 0.15);
-  border: 1px solid rgba(242, 235, 221, 0.4);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-}
-
-.tagExploring:hover {
-  background: rgba(242, 235, 221, 0.22);
-  border-color: rgba(242, 235, 221, 0.6);
-}
-
-/* Code decoration */
-.codeDecor {
-  margin-top: var(--space-8);
-  background: var(--gradient-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-.codeHeader {
-  display: flex;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  background: rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.codeDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--color-text-muted);
-}
-
-.codeDot:nth-child(1) {
-  background: #ff5f57;
-}
-
-.codeDot:nth-child(2) {
-  background: #febc2e;
-}
-
-.codeDot:nth-child(3) {
-  background: #28c840;
-}
-
-.codeContent {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-  padding: var(--space-4);
+  line-height: 1;
   margin: 0;
-  line-height: 1.6;
 }
 
 /* ============================================
-   RESPONSIVE
+   BODY — Narrative
    ============================================ */
 
-@media (max-width: 900px) {
-  .content {
-    grid-template-columns: 1fr;
-    gap: var(--space-12);
-  }
-
-  .quickFacts {
-    flex-wrap: wrap;
-    gap: var(--space-6);
-  }
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 60ch;
 }
 
-@media (max-width: 768px) {
-  .section {
-    padding: var(--space-16) 0;
-  }
+.body p {
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
 
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
+.lede {
+  font-size: var(--text-xl) !important;
+  line-height: 1.55 !important;
+  color: var(--color-text-primary) !important;
+  font-weight: 400;
+}
+
+/* ============================================
+   TOOLBOX — Plain mono text, not chips
+   ============================================ */
+
+.toolbox {
+  margin-top: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-6);
+}
+
+.toolboxRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: var(--space-6);
+  align-items: baseline;
+  margin: 0;
+}
+
+.toolboxLabel {
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  font-weight: 400;
+}
+
+.toolboxList {
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.toolboxList span {
+  white-space: nowrap;
+}
+
+.dot {
+  color: var(--color-text-muted);
+  margin: 0 0.5em;
+  user-select: none;
+}
+
+/* ============================================
+   MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .container::before {
+    inset: -2rem -1.5rem;
   }
 
   .title {
-    font-size: var(--text-3xl);
+    font-size: var(--text-4xl);
   }
 
-  .titleLine {
-    display: none;
+  .body p {
+    font-size: var(--text-base);
   }
 
-  .intro {
-    font-size: var(--text-lg);
+  .lede {
+    font-size: var(--text-lg) !important;
   }
 
-  .factNumber {
-    font-size: var(--text-3xl);
+  .toolboxRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+    margin-bottom: var(--space-3);
+  }
+
+  .toolboxLabel {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    transition: none;
+    opacity: 1;
+    transform: none;
   }
 }

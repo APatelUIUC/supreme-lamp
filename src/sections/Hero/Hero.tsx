@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { personalInfo } from '../../data/navigation';
-import VoronoiPreview from '../../components/VoronoiPreview';
+import LatentAtlasPreview from '../../components/LatentAtlasPreview';
 import styles from './Hero.module.css';
 
 interface HeroProps {
@@ -10,7 +10,9 @@ interface HeroProps {
 const Hero = ({ visible }: HeroProps) => {
   const [typedText, setTypedText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
+  const [previewReady, setPreviewReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const fullText = personalInfo.tagline;
 
   // Typing effect
@@ -55,6 +57,52 @@ const Hero = ({ visible }: HeroProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Voronoi entry fade-in (after the hero's other animations land)
+  useEffect(() => {
+    const t = setTimeout(() => setPreviewReady(true), 1800);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Scroll-driven horizontal drift for the Voronoi.
+  //   - At scrollY = 0: card sits ~15vw to the LEFT of its base position
+  //     (so it's more centered in the hero)
+  //   - As you scroll, it slides right toward the viewport edge
+  //   - By the time you've scrolled ~80% of one viewport height,
+  //     it's at its base position (right: 5vw) and stays there
+  // Disabled on mobile (the card is in-flow there, not fixed).
+  useEffect(() => {
+    let raf: number | null = null;
+
+    const update = () => {
+      raf = null;
+      const el = previewRef.current;
+      if (!el) return;
+
+      if (window.innerWidth <= 768) {
+        el.style.transform = '';
+        return;
+      }
+
+      const hero = window.innerHeight;
+      const progress = Math.min(1, Math.max(0, window.scrollY / (hero * 0.8)));
+      const x = -15 * (1 - progress); // start −15vw, end 0
+      el.style.transform = `translateX(${x.toFixed(2)}vw)`;
+    };
+
+    const onScroll = () => {
+      if (raf == null) raf = requestAnimationFrame(update);
+    };
+
+    update(); // set initial position before first paint
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', update);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <section id="home" className={`${styles.hero} ${visible ? styles.visible : ''}`}>
       <div ref={containerRef} className={styles.content}>
@@ -94,14 +142,14 @@ const Hero = ({ visible }: HeroProps) => {
 
       </div>
 
-      {/* 3D Voronoi preview — fixed to the top-right of the viewport,
-          visible across the whole page like a piece of the header.
-          Kept OUTSIDE the parallax-transformed `.content` div so the
-          position:fixed correctly anchors to the viewport. */}
-      <div className={styles.previewSlot}>
-        <VoronoiPreview
-          href="https://3d-voronoi.vercel.app/"
-          label="3D Voronoi"
+      {/* Latent Atlas preview — fixed to the top-right of the viewport,
+          drifts right with scroll. Featured project card. */}
+      <div
+        ref={previewRef}
+        className={`${styles.previewSlot} ${previewReady ? styles.previewReady : ''}`}
+      >
+        <LatentAtlasPreview
+          href="https://latent-atlas-alpha.vercel.app/"
         />
       </div>
 

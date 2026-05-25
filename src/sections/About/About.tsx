@@ -28,6 +28,14 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
+  const renderToolList = (tools: string[]) =>
+    tools.map((tool, i) => (
+      <span key={tool}>
+        {i > 0 && <span className={styles.dot}>·</span>}
+        {tool}
+      </span>
+    ));
+
   return (
     <section
       id="about"
@@ -35,107 +43,44 @@ const About = () => {
       className={`${styles.section} ${isVisible ? styles.visible : ''}`}
     >
       <div className={styles.container}>
-        {/* Section header */}
         <div className={styles.header}>
-          <span className={styles.sectionNumber}>01.</span>
-          <h2 className={styles.title}>
-            About <span className={styles.titleHighlight}>Me</span>
-          </h2>
-          <div className={styles.titleLine} />
+          <span className={styles.sectionNumber}>01</span>
+          <h2 className={styles.title}>About</h2>
         </div>
 
-        <div className={styles.content}>
-          {/* Text content */}
-          <div className={styles.textContent}>
-            <p className={styles.intro}>
-              I'm a full stack & AI engineer with a fascination for mathematical patterns
-              and tessellations. From NCSSM to UIUC, I've been building software that
-              brings complex ideas to life.
-            </p>
+        <div className={styles.body}>
+          <p className={styles.lede}>
+            Full stack and AI engineer with a fascination for mathematical
+            patterns and tessellations. NCSSM, then UIUC. Eight years building
+            software since.
+          </p>
 
-            <p className={styles.body}>
-              Currently at Chekhub in Raleigh, I build operations management software
-              and lead AI integrations using MCP. Previously at Centene, I developed
-              AI-powered healthcare solutions, and at IBM, I built enterprise software at scale.
-            </p>
+          <p>
+            Currently at Chekhub in Raleigh, building operations management
+            software and leading AI integrations with MCP. Before that, AI in
+            healthcare at Centene and enterprise software at scale at IBM.
+          </p>
 
-            <p className={styles.body}>
-              When I'm not shipping features, you'll find me exploring generative art,
-              building interactive tiling visualizations, or diving into the mathematics
-              behind aperiodic patterns like the Einstein monotile.
-            </p>
-
-            {/* Quick facts */}
-            <div className={styles.quickFacts}>
-              <div className={styles.fact}>
-                <span className={styles.factNumber}>UIUC</span>
-                <span className={styles.factLabel}>Education</span>
-              </div>
-              <div className={styles.fact}>
-                <span className={styles.factNumber}>NCSSM</span>
-                <span className={styles.factLabel}>High School</span>
-              </div>
-              <div className={styles.fact}>
-                <span className={styles.factNumber}>8+</span>
-                <span className={styles.factLabel}>Years Experience</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Toolbox */}
-          <div className={styles.skillsContainer}>
-            <h3 className={styles.skillsTitle}>Toolbox</h3>
-
-            <div className={styles.toolboxSection}>
-              <span className={styles.toolboxLabel}>Daily drivers</span>
-              <div className={styles.tagList}>
-                {toolbox.daily.map((tool) => (
-                  <span key={tool} className={styles.tag}>{tool}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.toolboxSection}>
-              <span className={styles.toolboxLabel}>Also ship with</span>
-              <div className={styles.tagList}>
-                {toolbox.ship.map((tool) => (
-                  <span key={tool} className={styles.tagSecondary}>{tool}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.toolboxSection}>
-              <span className={styles.toolboxLabel}>Currently exploring</span>
-              <div className={styles.tagList}>
-                {toolbox.exploring.map((tool) => (
-                  <span key={tool} className={styles.tagExploring}>{tool}</span>
-                ))}
-              </div>
-            </div>
-
-            {/* Decorative code block */}
-            <div className={styles.codeDecor}>
-              <div className={styles.codeHeader}>
-                <span className={styles.codeDot} />
-                <span className={styles.codeDot} />
-                <span className={styles.codeDot} />
-              </div>
-              <pre className={styles.codeContent}>
-{`const akash = {
-  location: "Raleigh, NC",
-  interests: ["tessellations", "math"],
-  current: "Chekhub",
-  seeking: "the hat"
-};`}
-              </pre>
-            </div>
-          </div>
+          <p>
+            When I'm not shipping features I'm chasing generative art and the
+            mathematics behind aperiodic patterns — like the Einstein monotile.
+          </p>
         </div>
-      </div>
 
-      {/* Background decoration */}
-      <div className={styles.bgDecoration}>
-        <div className={styles.tessellationPattern} />
+        <dl className={styles.toolbox} aria-label="Toolbox">
+          <div className={styles.toolboxRow}>
+            <dt className={styles.toolboxLabel}>daily</dt>
+            <dd className={styles.toolboxList}>{renderToolList(toolbox.daily)}</dd>
+          </div>
+          <div className={styles.toolboxRow}>
+            <dt className={styles.toolboxLabel}>ship with</dt>
+            <dd className={styles.toolboxList}>{renderToolList(toolbox.ship)}</dd>
+          </div>
+          <div className={styles.toolboxRow}>
+            <dt className={styles.toolboxLabel}>exploring</dt>
+            <dd className={styles.toolboxList}>{renderToolList(toolbox.exploring)}</dd>
+          </div>
+        </dl>
       </div>
     </section>
   );
