@@ -73,6 +73,18 @@ export const projects: Project[] = [
     category: 'open-source',
   },
   {
+    id: 'sae-explorer',
+    title: 'SAE Explorer',
+    description:
+      "Mechanistic interpretability tool that runs GPT-2 fully in the browser via ONNX/WASM, decomposes the model's activations through a Sparse Autoencoder, and lets you ablate individual concepts to see how predictions shift.",
+    technologies: ['TypeScript', 'GPT-2', 'ONNX', 'FastAPI', 'Mech Interp'],
+    githubUrl: 'https://github.com/APatelUIUC/neuralnav',
+    // Local-only for now (needs the FastAPI sidecar); link to the repo
+    liveUrl: 'https://github.com/APatelUIUC/neuralnav',
+    featured: true,
+    category: 'open-source',
+  },
+  {
     id: 'coming-soon',
     title: 'Coming Soon',
     description:
@@ -91,8 +103,8 @@ export const getFeaturedProjects = (): Project[] =>
 export const getProjectsByCategory = (category: Project['category']): Project[] =>
   projects.filter((p) => p.category === category);
 
-// Get the 3 featured projects for display
+// Get the featured projects for display in the Projects section
 export const getDisplayProjects = (): Project[] => {
-  const ids = ['3d-voronoi', 'tiling-music', 'tactile-js'];
+  const ids = ['sae-explorer', '3d-voronoi', 'tiling-music', 'tactile-js'];
   return ids.map((id) => projects.find((p) => p.id === id)!);
 };

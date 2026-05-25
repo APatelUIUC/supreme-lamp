@@ -71,7 +71,7 @@ const Contact = () => {
       <div className={styles.container}>
         {/* Section header */}
         <div className={styles.header}>
-          <span className={styles.sectionNumber}>04.</span>
+          <span className={styles.sectionNumber}>04</span>
           <h2 className={styles.title}>Get In Touch</h2>
         </div>
 

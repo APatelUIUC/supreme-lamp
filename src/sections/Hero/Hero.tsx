@@ -43,18 +43,27 @@ const Hero = ({ visible }: HeroProps) => {
     return () => clearInterval(cursorTimer);
   }, []);
 
-  // Parallax effect
+  // Parallax effect — desktop only. On mobile the Voronoi card sits
+  // in-flow below the CTAs, and parallax-shifting .content downward
+  // makes the CTAs visually slide INTO the card's area.
   useEffect(() => {
     const handleScroll = () => {
       if (containerRef.current) {
         const scrollY = window.scrollY;
-        containerRef.current.style.transform = `translateY(${scrollY * 0.3}px)`;
+        const isMobile = window.innerWidth <= 768;
+        containerRef.current.style.transform = isMobile
+          ? ''
+          : `translateY(${scrollY * 0.3}px)`;
         containerRef.current.style.opacity = `${1 - scrollY / 700}`;
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   // Voronoi entry fade-in (after the hero's other animations land)

@@ -114,9 +114,11 @@
 .sectionNumber {
   display: block;
   font-family: var(--font-mono);
-  font-size: var(--text-lg);
+  font-size: var(--text-xs);
+  letter-spacing: 0.24em;
   color: var(--color-blue-accent);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
 }
 
 .title {
@@ -198,8 +200,9 @@
   font-family: var(--font-mono);
   font-size: var(--text-lg);
   font-weight: 500;
-  color: var(--color-bg-primary);
-  background: var(--gradient-primary);
+  color: var(--color-text-primary);
+  background: var(--color-blue-accent);
+  border: 1px solid var(--color-blue-accent);
   border-radius: var(--radius-lg);
   text-decoration: none;
   transition: all var(--transition-base);
@@ -217,7 +220,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.18),
     transparent
   );
   transition: left var(--transition-slow);
@@ -229,7 +232,7 @@
 
 .ctaButton:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 40px rgba(242, 235, 221, 0.4);
+  box-shadow: 0 10px 30px rgba(91, 163, 247, 0.32);
 }
 
 .ctaButton svg {
