@@ -63,12 +63,12 @@
   width: 40px;
   height: 36px;
   transition: all var(--transition-base);
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+  filter: drop-shadow(0 0 8px rgba(242, 235, 221, 0.3));
 }
 
 .logo:hover .logoMark {
-  filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.5))
-         drop-shadow(0 0 20px rgba(255, 107, 53, 0.4));
+  filter: drop-shadow(0 0 12px rgba(242, 235, 221, 0.5))
+         drop-shadow(0 0 20px rgba(242, 235, 221, 0.4));
   transform: scale(1.05);
 }
 

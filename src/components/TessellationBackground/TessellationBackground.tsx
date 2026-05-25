@@ -67,14 +67,16 @@ const TessellationBackground = ({
         // Snappy ripple - 500ms max spread from center
         const delay = normalizedDist * 500;
 
+        // All tiles are now cream-toned; the three classes vary stroke opacity
+        // so we still get the layered depth feel without a second color.
         const colorRandom = Math.random();
         let colorType: 'blue' | 'orange' | 'gradient';
-        if (colorRandom < 0.7) {
-          colorType = 'blue';
+        if (colorRandom < 0.6) {
+          colorType = 'blue';      // faintest stroke
         } else if (colorRandom < 0.9) {
-          colorType = 'orange';
+          colorType = 'gradient';  // mid
         } else {
-          colorType = 'gradient';
+          colorType = 'orange';    // strongest stroke (rare "warm bloom")
         }
 
         triangleList.push({
@@ -156,10 +158,10 @@ const TessellationBackground = ({
       const elapsed = Date.now() - startTimeRef.current;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Subtle ambient glow
+      // Subtle ambient glow — both cream now, just different positions
       const glowPoints = [
-        { x: canvas.width * 0.2, y: canvas.height * 0.3, color: 'rgba(0, 212, 255, 0.02)' },
-        { x: canvas.width * 0.8, y: canvas.height * 0.7, color: 'rgba(255, 107, 53, 0.02)' },
+        { x: canvas.width * 0.2, y: canvas.height * 0.3, color: 'rgba(242, 235, 221, 0.015)' },
+        { x: canvas.width * 0.8, y: canvas.height * 0.7, color: 'rgba(242, 235, 221, 0.012)' },
       ];
 
       glowPoints.forEach((point, i) => {
@@ -186,8 +188,8 @@ const TessellationBackground = ({
           mousePos.x, mousePos.y, 0,
           mousePos.x, mousePos.y, 150
         );
-        mouseGlow.addColorStop(0, 'rgba(0, 212, 255, 0.04)');
-        mouseGlow.addColorStop(0.5, 'rgba(255, 107, 53, 0.02)');
+        mouseGlow.addColorStop(0, 'rgba(242, 235, 221, 0.035)');
+        mouseGlow.addColorStop(0.5, 'rgba(242, 235, 221, 0.015)');
         mouseGlow.addColorStop(1, 'transparent');
 
         ctx.fillStyle = mouseGlow;

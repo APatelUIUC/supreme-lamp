@@ -2,7 +2,7 @@
    GLOBAL STYLES
    ============================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap');
 
 *,
 *::before,
@@ -55,26 +55,27 @@ body.no-scroll {
 
 /* Selection */
 ::selection {
-  background: var(--color-orange-primary);
-  color: var(--color-bg-primary);
+  background: rgba(242, 235, 221, 0.2);
+  color: var(--color-text-primary);
 }
 
 /* Links */
 a {
-  color: var(--color-blue-accent);
+  color: var(--color-text-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--color-orange-primary);
+  color: var(--color-orange-bright);
 }
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--color-text-primary);
 }
 
@@ -119,12 +120,11 @@ img {
   }
 }
 
-/* Gradient text utility */
+/* Gradient text utility — now a solid cream (no gradient on text) */
 .gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text-primary);
+  background: none;
+  -webkit-text-fill-color: currentColor;
 }
 
 /* Glow effects */
@@ -166,10 +166,30 @@ img {
   }
 }
 
-/* Focus styles for accessibility */
+/* Focus styles for accessibility — bright blue, the one place it appears */
 :focus-visible {
   outline: 2px solid var(--color-blue-accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-4);
+  z-index: var(--z-overlay);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--space-4);
 }
 
 /* Reduced motion */

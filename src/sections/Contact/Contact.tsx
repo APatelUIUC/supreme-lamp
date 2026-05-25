@@ -122,8 +122,8 @@ const Contact = () => {
           <svg viewBox="0 0 200 174" fill="none">
             <defs>
               <linearGradient id="contactTriangleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#ff6b35" stopOpacity="0.3" />
+                <stop offset="0%" stopColor="#F2EBDD" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#F2EBDD" stopOpacity="0.3" />
               </linearGradient>
             </defs>
             <polygon

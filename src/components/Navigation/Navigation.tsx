@@ -85,17 +85,17 @@ const Navigation = ({ visible }: NavigationProps) => {
               <svg viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="navLogoGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#00d4ff" />
-                    <stop offset="100%" stopColor="#ff6b35" />
+                    <stop offset="0%" stopColor="#F2EBDD" />
+                    <stop offset="100%" stopColor="#F2EBDD" />
                   </linearGradient>
                   <linearGradient id="navLogoFlagFill" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#ff6b35" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#ff6b35" stopOpacity="0.1" />
+                    <stop offset="0%" stopColor="#F2EBDD" stopOpacity="0.10" />
+                    <stop offset="100%" stopColor="#F2EBDD" stopOpacity="0.03" />
                   </linearGradient>
                   {/* Vertical gradient for shared stem to bridge both colors */}
                   <linearGradient id="navLogoVerticalGradient" x1="0" y1="2" x2="0" y2="38" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#00d4ff" />
-                    <stop offset="100%" stopColor="#ff6b35" />
+                    <stop offset="0%" stopColor="#F2EBDD" />
+                    <stop offset="100%" stopColor="#F2EBDD" />
                   </linearGradient>
                 </defs>
 
@@ -110,7 +110,7 @@ const Navigation = ({ visible }: NavigationProps) => {
                 <line
                   x1="22" y1="2"
                   x2="1.5" y2="38"
-                  stroke="#00d4ff"
+                  stroke="#F2EBDD"
                   strokeWidth="3"
                   strokeLinecap="round"
                   className={styles.logoALeft}
@@ -120,7 +120,7 @@ const Navigation = ({ visible }: NavigationProps) => {
                 <line
                   x1="10.6" y1="22"
                   x2="22" y2="22"
-                  stroke="#00d4ff"
+                  stroke="#F2EBDD"
                   strokeWidth="3"
                   strokeLinecap="round"
                   className={styles.logoCrossbar}
@@ -129,7 +129,7 @@ const Navigation = ({ visible }: NavigationProps) => {
                 {/* P - Flag outline - angled to mirror A's diagonal */}
                 <polyline
                   points="22,2 38,22 22,22"
-                  stroke="#ff6b35"
+                  stroke="#F2EBDD"
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"

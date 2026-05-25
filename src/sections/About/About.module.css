@@ -186,16 +186,16 @@
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   color: var(--color-blue-accent);
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.3);
+  background: rgba(242, 235, 221, 0.1);
+  border: 1px solid rgba(242, 235, 221, 0.3);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 
 .tag:hover {
-  background: rgba(0, 212, 255, 0.15);
-  border-color: rgba(0, 212, 255, 0.5);
+  background: rgba(242, 235, 221, 0.15);
+  border-color: rgba(242, 235, 221, 0.5);
 }
 
 .tagSecondary {
@@ -218,16 +218,16 @@
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   color: #ff8a5c;
-  background: rgba(255, 107, 53, 0.15);
-  border: 1px solid rgba(255, 107, 53, 0.4);
+  background: rgba(242, 235, 221, 0.15);
+  border: 1px solid rgba(242, 235, 221, 0.4);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 
 .tagExploring:hover {
-  background: rgba(255, 107, 53, 0.22);
-  border-color: rgba(255, 107, 53, 0.6);
+  background: rgba(242, 235, 221, 0.22);
+  border-color: rgba(242, 235, 221, 0.6);
 }
 
 /* Code decoration */

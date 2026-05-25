@@ -23,16 +23,16 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
   const trianglesRef = useRef<TriangleData[]>([]);
   const tessellationDataRef = useRef<{ triBase: number; triHeight: number }>({ triBase: 80, triHeight: 80 * Math.sqrt(3) / 2 });
 
-  // Color palette
+  // Color palette — cream on deep navy
   const colors = {
-    bgDark: '#0a0e17',
-    blue: '#00d4ff',
-    blueGlow: 'rgba(0, 212, 255, 0.6)',
-    blueFill: 'rgba(0, 212, 255, 0.15)',
-    orange: '#ff6b35',
-    orangeGlow: 'rgba(255, 107, 53, 0.6)',
-    orangeFill: 'rgba(255, 107, 53, 0.2)',
-    white: 'rgba(255, 255, 255, 0.1)',
+    bgDark: '#08111F',
+    blue: '#F2EBDD',
+    blueGlow: 'rgba(242, 235, 221, 0.3)',
+    blueFill: 'rgba(242, 235, 221, 0.08)',
+    orange: '#F2EBDD',
+    orangeGlow: 'rgba(242, 235, 221, 0.25)',
+    orangeFill: 'rgba(242, 235, 221, 0.1)',
+    white: 'rgba(242, 235, 221, 0.15)',
   };
 
   // Generate perfect tessellation
@@ -151,19 +151,14 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
     ctx.lineTo(x3, y3);
     ctx.closePath();
 
-    // Fill color based on type
+    // Outline-only, cream — varying stroke intensity for depth
+    ctx.fillStyle = `rgba(242, 235, 221, ${0.015 * opacity})`;
     if (color === 'orange') {
-      ctx.fillStyle = `rgba(255, 107, 53, ${0.12 * opacity})`;
-      ctx.strokeStyle = `rgba(255, 107, 53, ${0.5 * opacity})`;
+      ctx.strokeStyle = `rgba(242, 235, 221, ${0.45 * opacity})`;
     } else if (color === 'gradient') {
-      const gradient = ctx.createLinearGradient(x2, y2, x3, y3);
-      gradient.addColorStop(0, `rgba(0, 212, 255, ${0.15 * opacity})`);
-      gradient.addColorStop(1, `rgba(255, 107, 53, ${0.15 * opacity})`);
-      ctx.fillStyle = gradient;
-      ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * opacity})`;
+      ctx.strokeStyle = `rgba(242, 235, 221, ${0.28 * opacity})`;
     } else {
-      ctx.fillStyle = `rgba(0, 212, 255, ${0.1 * opacity})`;
-      ctx.strokeStyle = `rgba(0, 212, 255, ${0.4 * opacity})`;
+      ctx.strokeStyle = `rgba(242, 235, 221, ${0.16 * opacity})`;
     }
 
     ctx.fill();
@@ -238,8 +233,8 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
         cssWidth / 2, cssHeight / 2, 0,
         cssWidth / 2, cssHeight / 2, glowSize
       );
-      gradient.addColorStop(0, `rgba(0, 212, 255, ${0.6 * glowOpacity})`);
-      gradient.addColorStop(0.3, `rgba(255, 107, 53, ${0.3 * glowOpacity})`);
+      gradient.addColorStop(0, `rgba(242, 235, 221, ${0.18 * glowOpacity})`);
+      gradient.addColorStop(0.3, `rgba(242, 235, 221, ${0.08 * glowOpacity})`);
       gradient.addColorStop(1, 'transparent');
 
       ctx.fillStyle = gradient;
@@ -299,8 +294,8 @@ const OpeningAnimation = ({ onComplete }: OpeningAnimationProps) => {
         <svg viewBox="0 0 100 87" className={styles.logoSvg}>
           <defs>
             <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00d4ff" />
-              <stop offset="100%" stopColor="#ff6b35" />
+              <stop offset="0%" stopColor="#F2EBDD" />
+              <stop offset="100%" stopColor="#F2EBDD" />
             </linearGradient>
             <filter id="glow">
               <feGaussianBlur stdDeviation="3" result="coloredBlur"/>

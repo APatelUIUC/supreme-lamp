@@ -169,11 +169,11 @@ const Hero = ({ visible }: HeroProps) => {
         <svg className={styles.triangle1} viewBox="0 0 100 87">
           <defs>
             <linearGradient id="heroTriGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="#ff6b35" stopOpacity="0.08" />
+              <stop offset="0%" stopColor="#F2EBDD" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#F2EBDD" stopOpacity="0.04" />
             </linearGradient>
           </defs>
-          <polygon points="50,0 100,87 0,87" fill="url(#heroTriGradient)" stroke="rgba(0,212,255,0.2)" strokeWidth="1" />
+          <polygon points="50,0 100,87 0,87" fill="url(#heroTriGradient)" stroke="rgba(242, 235, 221,0.2)" strokeWidth="1" />
         </svg>
       </div>
     </section>

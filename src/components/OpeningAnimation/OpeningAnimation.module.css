@@ -45,8 +45,8 @@
 .logoSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8))
-          drop-shadow(0 0 60px rgba(255, 107, 53, 0.5));
+  filter: drop-shadow(0 0 30px rgba(242, 235, 221, 0.8))
+          drop-shadow(0 0 60px rgba(242, 235, 221, 0.5));
   animation: logoPulse 1.5s ease-in-out infinite;
 }
 
@@ -67,12 +67,12 @@
 
 @keyframes logoPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8))
-            drop-shadow(0 0 60px rgba(255, 107, 53, 0.5));
+    filter: drop-shadow(0 0 30px rgba(242, 235, 221, 0.8))
+            drop-shadow(0 0 60px rgba(242, 235, 221, 0.5));
   }
   50% {
-    filter: drop-shadow(0 0 50px rgba(0, 212, 255, 1))
-            drop-shadow(0 0 80px rgba(255, 107, 53, 0.8));
+    filter: drop-shadow(0 0 50px rgba(242, 235, 221, 1))
+            drop-shadow(0 0 80px rgba(242, 235, 221, 0.8));
   }
 }
 
@@ -96,14 +96,11 @@
 }
 
 .nameText {
-  font-family: var(--font-display), 'Space Grotesk', sans-serif;
+  font-family: var(--font-display), sans-serif;
   font-size: clamp(2rem, 8vw, 4rem);
-  font-weight: 700;
-  background: linear-gradient(135deg, #00d4ff 0%, #ff6b35 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+  font-weight: 500;
+  color: #F2EBDD;
+  filter: drop-shadow(0 0 30px rgba(242, 235, 221, 0.25));
   white-space: nowrap;
   letter-spacing: -0.02em;
 }
