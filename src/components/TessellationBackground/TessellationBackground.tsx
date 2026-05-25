@@ -137,79 +137,9 @@ const TessellationBackground = ({
     }
   }, [phase, onAnimationComplete]);
 
-  // Canvas for ambient glow
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
-    startTimeRef.current = Date.now();
-
-    const animate = () => {
-      const elapsed = Date.now() - startTimeRef.current;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Subtle ambient glow — both cream now, just different positions
-      const glowPoints = [
-        { x: canvas.width * 0.2, y: canvas.height * 0.3, color: 'rgba(242, 235, 221, 0.015)' },
-        { x: canvas.width * 0.8, y: canvas.height * 0.7, color: 'rgba(242, 235, 221, 0.012)' },
-      ];
-
-      glowPoints.forEach((point, i) => {
-        const pulse = Math.sin(elapsed * 0.0008 + i * Math.PI) * 0.5 + 0.5;
-        const radius = 250 + pulse * 100;
-
-        const gradient = ctx.createRadialGradient(
-          point.x, point.y, 0,
-          point.x, point.y, radius
-        );
-        gradient.addColorStop(0, point.color);
-        gradient.addColorStop(1, 'transparent');
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      // Mouse glow when interactive
-      if (interactive && phase === 'complete') {
-        const mousePos = mousePosRef.current;
-        const mouseGlow = ctx.createRadialGradient(
-          mousePos.x, mousePos.y, 0,
-          mousePos.x, mousePos.y, 150
-        );
-        mouseGlow.addColorStop(0, 'rgba(242, 235, 221, 0.035)');
-        mouseGlow.addColorStop(0.5, 'rgba(242, 235, 221, 0.015)');
-        mouseGlow.addColorStop(1, 'transparent');
-
-        ctx.fillStyle = mouseGlow;
-        ctx.beginPath();
-        ctx.arc(mousePos.x, mousePos.y, 150, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [interactive, phase]);
+  // (Removed: ambient canvas glow and mouse-follow glow — felt like noise
+  // against the refined cream/navy palette. Wireframe is the only background
+  // element now.)
 
   // Mouse tracking
   useEffect(() => {
@@ -241,42 +171,41 @@ const TessellationBackground = ({
     >
       <canvas ref={canvasRef} className={styles.ambientCanvas} />
 
-      <div className={styles.tessellationLayer}>
-        {triangles.map((triangle) => (
-          <div
-            key={triangle.id}
-            className={`
-              ${styles.triangle}
-              ${styles[triangle.colorType]}
-              ${styles[`layer${triangle.layer}`]}
-              ${!triangle.isUp ? styles.down : ''}
-              ${triangle.id === seedTriangleId ? styles.seed : ''}
-            `}
-            style={{
-              left: `${triangle.x}px`,
-              top: `${triangle.y}px`,
-              width: `${triangle.size}px`,
-              height: `${triangle.size * Math.sqrt(3) / 2}px`,
-              '--delay': `${triangle.delay}ms`,
-            } as React.CSSProperties}
-          />
-        ))}
-      </div>
+      <svg
+        className={styles.tessellationSvg}
+        width="100%"
+        height="100%"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        {triangles.map((triangle) => {
+          // Compute the three vertices in screen space.
+          const w = triangle.size;
+          const h = triangle.size * Math.sqrt(3) / 2;
+          const x = triangle.x;
+          const y = triangle.y;
+          const points = triangle.isUp
+            ? `${x + w / 2},${y} ${x + w},${y + h} ${x},${y + h}`
+            : `${x},${y} ${x + w},${y} ${x + w / 2},${y + h}`;
+          return (
+            <polygon
+              key={triangle.id}
+              points={points}
+              fill="none"
+              strokeWidth="1"
+              vectorEffect="non-scaling-stroke"
+              className={`
+                ${styles.triPolygon}
+                ${styles[triangle.colorType]}
+                ${styles[`layer${triangle.layer}`]}
+                ${triangle.id === seedTriangleId ? styles.seed : ''}
+              `}
+              style={{ '--delay': `${triangle.delay}ms` } as React.CSSProperties}
+            />
+          );
+        })}
+      </svg>
 
-      <div className={styles.particlesLayer}>
-        {particles.map((particle) => (
-          <div
-            key={`particle-${particle.id}`}
-            className={styles.particle}
-            style={{
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
-              animationDelay: `${particle.delay}s`,
-              animationDuration: `${particle.duration}s`,
-            }}
-          />
-        ))}
-      </div>
     </div>
   );
 };

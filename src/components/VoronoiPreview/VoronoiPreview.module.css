@@ -1,0 +1,79 @@
+.preview {
+  display: block;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(8, 17, 31, 0.6);
+  border: 1px solid rgba(91, 163, 247, 0.15);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 250ms ease, transform 250ms ease,
+              box-shadow 250ms ease;
+  will-change: transform;
+}
+
+.preview:hover {
+  border-color: rgba(91, 163, 247, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(8, 17, 31, 0.4),
+              0 0 0 1px rgba(91, 163, 247, 0.1);
+}
+
+.preview:focus-visible {
+  outline: 2px solid var(--color-blue-accent);
+  outline-offset: 3px;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Match the default 360×240 logical render size so display aspect
+     follows internal aspect even when CSS shrinks the canvas */
+  aspect-ratio: 3 / 2;
+}
+
+.label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 14px 16px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(242, 235, 221, 0.78);
+  background: linear-gradient(
+    to top,
+    rgba(8, 17, 31, 0.85) 0%,
+    rgba(8, 17, 31, 0.6) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.labelText {
+  font-weight: 500;
+}
+
+.label svg {
+  width: 14px;
+  height: 14px;
+  color: rgba(91, 163, 247, 0.9);
+  transition: transform 200ms ease;
+}
+
+.preview:hover .label svg {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 1024px) {
+  .preview {
+    /* Reduced visual presence on tablets; full-width below CTAs on mobile
+       can be enabled later if you want */
+  }
+}

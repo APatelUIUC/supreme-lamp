@@ -93,6 +93,44 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Cloud-like soft backdrop. The mask is a continuous gradient with no
+   hard cutoff anywhere, so there's never a perceivable rectangle edge —
+   just a gentle dimming that follows the text shape. Lower bg opacity
+   lets the wireframe whisper through. */
+.textContent::before {
+  content: '';
+  position: absolute;
+  inset: -3rem -5rem;
+  background: rgba(8, 17, 31, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: -1;
+  mask-image: radial-gradient(
+    ellipse at center,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.45) 55%,
+    rgba(0, 0, 0, 0.15) 80%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.45) 55%,
+    rgba(0, 0, 0, 0.15) 80%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 768px) {
+  .textContent::before {
+    inset: -2rem -2rem;
+  }
 }
 
 .name {
@@ -117,28 +155,28 @@
   font-size: var(--text-4xl);
   font-weight: 400;
   letter-spacing: -0.01em;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
   opacity: 0;
   transform: translateY(20px);
   animation: slideUp 0.6s ease-out 0.5s forwards;
 }
 
 .triangleHighlight {
-  color: var(--color-orange-neon);
+  color: var(--color-blue-accent);
   font-weight: 500;
   font-style: italic;
   position: relative;
 }
 
+/* Triangle glyph: inline (not floating), bigger (0.72em), baseline-aligned.
+   Non-breaking space before it so it stays on the same line as "Triangle". */
 .triangleHighlight::after {
-  content: '▲';
-  position: absolute;
-  top: 0.15em;
-  right: -0.9em;
-  font-size: 0.45em;
-  color: var(--color-orange-neon);
-  opacity: 0.6;
+  content: '\00a0▲';
+  font-size: 0.72em;
+  color: var(--color-blue-accent);
   font-style: normal;
+  display: inline-block;
+  vertical-align: 0.12em;
 }
 
 .tagline {
@@ -151,13 +189,15 @@
 }
 
 .cursor {
-  color: var(--color-text-primary);
+  color: var(--color-blue-accent);
   opacity: 0;
   transition: opacity 0.1s;
+  margin-left: 1px;
+  font-weight: 300;
 }
 
 .cursor.visible {
-  opacity: 1;
+  opacity: 0.7;
 }
 
 .description {
@@ -273,7 +313,48 @@
 }
 
 /* ============================================
-   FLOATING CODE BLOCK
+   3D VORONOI PREVIEW SLOT
+   ============================================ */
+
+.previewSlot {
+  position: fixed;
+  right: 5vw;
+  top: 14vh;
+  opacity: 0;
+  animation: previewFadeIn 0.8s ease-out 1.8s forwards;
+  pointer-events: auto;
+  z-index: 5;
+}
+
+@keyframes previewFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile (<= 768px): skip the sticky behavior entirely. The card
+   stacks inline below the hero text, scrolls naturally with the page.
+   Tablets (769–1024px) keep the fixed/sticky desktop behavior. */
+@media (max-width: 768px) {
+  .hero {
+    /* Stack content + voronoi vertically instead of trying to flex them in a row */
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .previewSlot {
+    position: static;
+    right: auto;
+    top: auto;
+    width: 100%;
+    max-width: 360px;
+    margin: var(--space-8) auto 0;
+    z-index: auto;
+    animation: previewFadeIn 0.6s ease-out 1.4s forwards;
+  }
+}
+
+/* ============================================
+   FLOATING CODE BLOCK (deprecated — kept for now in case of revert)
    ============================================ */
 
 .floatingCode {

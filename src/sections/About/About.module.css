@@ -84,11 +84,46 @@
   opacity: 0;
   transform: translateX(-30px);
   transition: all 0.6s ease-out 0.2s;
+  position: relative;
+  isolation: isolate;
 }
 
 .section.visible .textContent {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Cloud-like soft backdrop. No hard edges — gentle dimming around text. */
+.textContent::before {
+  content: '';
+  position: absolute;
+  inset: -3rem -4rem;
+  background: rgba(8, 17, 31, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: -1;
+  mask-image: radial-gradient(
+    ellipse at center,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.45) 55%,
+    rgba(0, 0, 0, 0.15) 80%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.45) 55%,
+    rgba(0, 0, 0, 0.15) 80%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 768px) {
+  .textContent::before {
+    inset: -2rem -2rem;
+  }
 }
 
 .intro {

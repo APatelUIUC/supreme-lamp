@@ -4,11 +4,12 @@
    ============================================ */
 
 :root {
-  /* Backgrounds — deep blue, three values for depth */
-  --color-bg-primary: #08111F;
-  --color-bg-secondary: #0D1A2D;
-  --color-bg-tertiary: #13294B;
-  --color-bg-card: rgba(13, 26, 45, 0.72);
+  /* Backgrounds — deep blue, three values for depth.
+     Lifted from near-black (#08111F) so the bg actually reads as blue. */
+  --color-bg-primary: #0E2140;
+  --color-bg-secondary: #152A48;
+  --color-bg-tertiary: #1F3960;
+  --color-bg-card: rgba(21, 42, 72, 0.72);
 
   /* Blue spectrum — structural navy + one bright blue reserved for focus */
   --color-blue-deep: #08111F;

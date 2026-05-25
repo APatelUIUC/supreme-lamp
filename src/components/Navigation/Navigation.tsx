@@ -79,72 +79,60 @@ const Navigation = ({ visible }: NavigationProps) => {
         className={`${styles.nav} ${scrolled ? styles.scrolled : ''} ${visible ? styles.visible : ''}`}
       >
         <div className={styles.container}>
-          {/* Logo */}
+          {/* Logo — 4-line AP monogram.
+              Construction:
+                1. Spine: vertical line, 1.5× the length of the left arm
+                   (so the lower portion is the P's descending leg).
+                2. Left A-leg: diagonal from top of spine to bottom-left.
+                3. Slant: from left arm, down-and-right, crossing the spine
+                   and ending in space on the right side. Inside the A this
+                   reads as the (slanted) crossbar; past the spine it forms
+                   the hypotenuse of the P's bowl.
+                4. Bowl-close: horizontal from slant's right end back to spine.
+              The bowl is a right triangle on the RIGHT side of the spine. */}
           <a href="#home" className={styles.logo} onClick={() => handleNavClick('#home')}>
             <div className={styles.logoMark}>
-              <svg viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="navLogoGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#F2EBDD" />
-                    <stop offset="100%" stopColor="#F2EBDD" />
-                  </linearGradient>
-                  <linearGradient id="navLogoFlagFill" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#F2EBDD" stopOpacity="0.10" />
-                    <stop offset="100%" stopColor="#F2EBDD" stopOpacity="0.03" />
-                  </linearGradient>
-                  {/* Vertical gradient for shared stem to bridge both colors */}
-                  <linearGradient id="navLogoVerticalGradient" x1="0" y1="2" x2="0" y2="38" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#F2EBDD" />
-                    <stop offset="100%" stopColor="#F2EBDD" />
-                  </linearGradient>
-                </defs>
-
-                {/* P - Triangular flag/bowl fill - angled to mirror A's diagonal */}
-                <polygon
-                  points="22,2 38,22 22,22"
-                  fill="url(#navLogoFlagFill)"
-                  className={styles.logoPFlag}
+              <svg viewBox="0 0 44 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* 1. Spine — full length, top to bottom */}
+                <line
+                  x1="22" y1="4"
+                  x2="22" y2="52"
+                  stroke="#5BA3F7"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  className={styles.logoStem}
                 />
 
-                {/* A - Left diagonal (left edge of half-triangle) */}
+                {/* 2. A's left arm — top of spine to bottom-left */}
                 <line
-                  x1="22" y1="2"
-                  x2="1.5" y2="38"
-                  stroke="#F2EBDD"
-                  strokeWidth="3"
+                  x1="22" y1="4"
+                  x2="4" y2="36"
+                  stroke="#5BA3F7"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   className={styles.logoALeft}
                 />
 
-                {/* A - Crossbar (lifted and clearly visible) */}
+                {/* 3. Slant — start lower on left arm (deeper A hole), end shorter
+                       (smaller bowl). Tuned so the A's negative-space triangle and
+                       the P's bowl triangle have roughly equal area. */}
                 <line
-                  x1="10.6" y1="22"
-                  x2="22" y2="22"
-                  stroke="#F2EBDD"
-                  strokeWidth="3"
+                  x1="14" y1="18"
+                  x2="36" y2="36"
+                  stroke="#5BA3F7"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
-                  className={styles.logoCrossbar}
+                  className={styles.logoBowlSlant}
                 />
 
-                {/* P - Flag outline - angled to mirror A's diagonal */}
-                <polyline
-                  points="22,2 38,22 22,22"
-                  stroke="#F2EBDD"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                  className={styles.logoPFlagOutline}
-                />
-
-                {/* Shared vertical stem (right edge of A + stem of P) */}
+                {/* 4. P bowl close — horizontal back to spine, level with left arm bottom */}
                 <line
-                  x1="22" y1="2"
-                  x2="22" y2="38"
-                  stroke="url(#navLogoVerticalGradient)"
-                  strokeWidth="3"
+                  x1="36" y1="36"
+                  x2="22" y2="36"
+                  stroke="#5BA3F7"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
-                  className={styles.logoStem}
+                  className={styles.logoBowlClose}
                 />
               </svg>
             </div>

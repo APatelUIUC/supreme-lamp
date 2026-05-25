@@ -117,27 +117,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Decorative triangle */}
-        <div className={styles.decorTriangle}>
-          <svg viewBox="0 0 200 174" fill="none">
-            <defs>
-              <linearGradient id="contactTriangleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#F2EBDD" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#F2EBDD" stopOpacity="0.3" />
-              </linearGradient>
-            </defs>
-            <polygon
-              points="100,0 200,174 0,174"
-              fill="url(#contactTriangleGrad)"
-            />
-            <polygon
-              points="100,0 200,174 0,174"
-              fill="none"
-              stroke="url(#contactTriangleGrad)"
-              strokeWidth="1"
-            />
-          </svg>
-        </div>
       </div>
 
       {/* Footer */}
