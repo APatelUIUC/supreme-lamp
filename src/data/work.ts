@@ -20,7 +20,7 @@ export const workExperience: WorkExperience[] = [
     id: 'centene',
     company: 'Centene',
     role: 'Software Developer',
-    period: '2021 - 2025',
+    period: '2020 - 2025',
     description:
       'Developed cloud-native healthcare software and AI-powered solutions handling sensitive PHI data, ensuring HIPAA compliance while pioneering AI adoption across the organization.',
     highlights: [
@@ -35,7 +35,7 @@ export const workExperience: WorkExperience[] = [
     id: 'ibm',
     company: 'IBM',
     role: 'Software Engineer',
-    period: '2018 - 2021',
+    period: '2018 - 2020',
     description:
       'Worked on IBM Guardium, a leading enterprise data security platform that provides real-time database activity monitoring, vulnerability assessment, and data protection for organizations worldwide.',
     highlights: [
