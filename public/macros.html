@@ -59,7 +59,7 @@
       <div class="stat"><b>150</b><span>human-verified eval rows</span></div>
       <div class="stat"><b>4.7s → 0.3s</b><span>first-touch p95</span></div>
       <div class="stat"><b>$0.091</b><span>/user/mo AI floor</span></div>
-      <div class="stat"><b>34</b><span>tests · isolation-pinned</span></div>
+      <div class="stat"><b>42</b><span>tests · isolation-pinned</span></div>
     </div>
   </div>
 </header>
@@ -131,7 +131,7 @@
   </ol>
 
   <h2>Production, honestly</h2>
-  <p>The connector has been in daily use since July — real meals, real corrections, my own household
+  <p>The connector is in daily use — real meals, real corrections, my own household
   as the first tenants. Four bugs only production could teach, each now a regression test that was
   verified to fail without its fix: serverless froze function instances while Neon closed their
   pooled sockets (dead-connection handouts); FastMCP's OAuth discovery routes only work mounted at
@@ -223,16 +223,14 @@
   registration. Say <em>"log the usual breakfast."</em> Refresh the web app. Same row, two surfaces.
   Export or hard-delete your account any time from settings.</p>
 
-  <h2>Ten days, timestamped</h2>
-  <p>All of the above is recent, dense, and verifiable in commit history: the model benchmark and
-  PCC measurement (Jul 30), the latency decomposition and configuration fix, verified across idle
-  windows (Jul 31 – Aug 1), the AI estimate endpoint shipped, broken by a dependency-manifest gap,
-  diagnosed from one traceback, and fixed (Aug 1), the full front-end redesigned around
-  action-frequency and deployed (Aug 2), and the behavior-eval experiments with their shipped
-  survivors (Aug 2) — alongside a nightly agent that has run unattended since its first evening.
-  The system stayed in production, serving its users, through every one of those changes. The
-  durable assets — the benchmark sample with stable row ids, the behavior suite, the regression
-  tests, the post-mortem docs — are what make the pace safe rather than reckless.</p>
+  <h2>Built to stay safe to change</h2>
+  <p>Every change described here landed while the system stayed in production, serving its users —
+  including a database migration, a front-end rewrite, and a hosting reconfiguration. That isn't
+  nerve; it's the assets underneath: a benchmark sample with stable row ids so any model change can
+  be compared per-case, a behavior suite that catches connector regressions, regression tests
+  written to fail without their fix, a cross-user isolation suite that fails loudly on a forgotten
+  argument, and post-mortems that keep solved problems solved. Those are what make a change cheap,
+  and they're the part of this I'd bring to someone else's codebase first.</p>
 
   <h2>This isn't the only shipped thing</h2>
   <p>Macros is the deepest exhibit, not the only one: a meal-planning app my girlfriend actually
@@ -261,7 +259,7 @@
   keep the human on the decisions data can't make, and never ship the model's confidence without a
   check the model can't fake. The system being <em>about</em> Claude while being built <em>with</em>
   Claude wasn't a gimmick; it's how one engineer covers benchmark science, infrastructure,
-  agent design, and a front-end redesign in the same ten days — and it's the working style I'd
+  agent design, and a front-end redesign at all — and it's the working style I'd
   bring to a team.</p>
   <p style="margin-top:1.6rem;color:var(--soft);font-size:.95rem">Akash Patel · Raleigh-Durham, NC ·
   <a href="https://akashpa.tel">akashpa.tel</a></p>
