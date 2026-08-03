@@ -260,6 +260,17 @@
       benchmark sample and the metric/colloquial split that produced the central finding — models
       know nutrition facts but cannot guess portions — and its published GPT-4o + CoT baseline is
       the external reference point the results are compared against.</li>
+    <li><strong>"Barriers and Negative Nudges: Exploring Challenges in Food Journaling"</strong> —
+      <a href="https://dl.acm.org/doi/10.1145/2702123.2702155">Cordeiro et al., CHI 2015</a>. A study of 141
+      food journalers and 5,526 forum posts: what kills trackers is database-search friction and tools that
+      demand precision people don't have. This is why the product is a sentence you say to Claude rather
+      than a search box — the abandonment drivers named in this paper are the ones conversational logging
+      removes.</li>
+    <li><strong>"When Not to Trust Language Models"</strong> —
+      <a href="https://aclanthology.org/2023.acl-long.546/">Mallen et al., ACL 2023</a>. Models answer
+      popular facts reliably from parametric memory but fail on long-tail ones, and retrieval helps exactly
+      where memory fails. That split is the favorites-before-guessing policy: a generic burrito bowl gets an
+      estimate, "my usual shake" must be looked up.</li>
     <li><strong>Apple's Foundation Models &amp; Private Cloud Compute documentation</strong> — the
       availability/quota APIs and the generation-time entitlement gating
       (<code>com.apple.developer.private-cloud-compute</code>), verified empirically rather than
