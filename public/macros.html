@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Macros — a case study in shipping Claude to production</title>
+<style>
+  :root {
+    --paper:#f5f0e6; --ink:#211d18; --soft:#5c554b; --hair:#d9d0bf;
+    --plate:#191613; --plate-ink:#ece5d8; --plate-soft:#a89e8e; --accent:#b0562f;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font:17px/1.68 "Iowan Old Style","Palatino",Georgia,serif}
+  .measure{max-width:46rem;margin:0 auto;padding:0 1.4rem}
+  header{padding:5rem 0 0}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1.1rem}
+  h1{font-size:2.45rem;line-height:1.12;font-weight:600;letter-spacing:-.01em}
+  .standfirst{margin-top:1.2rem;font-size:1.12rem;color:var(--soft);max-width:40rem}
+  .statrow{display:flex;flex-wrap:wrap;gap:2.2rem;margin:2.4rem 0 0;padding:1.4rem 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .stat b{display:block;font-size:1.5rem;font-weight:650;font-variant-numeric:tabular-nums;font-family:-apple-system,system-ui,sans-serif}
+  .stat span{font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+  h2{font-size:1.6rem;font-weight:600;margin:3.4rem 0 1rem}
+  h3{font-size:1.05rem;font-weight:600;margin:2rem 0 .5rem;font-family:-apple-system,system-ui,sans-serif}
+  p{margin:.85rem 0}
+  a{color:inherit;text-decoration-color:var(--accent);text-underline-offset:3px}
+  code{font-family:var(--mono);font-size:.82em;background:rgba(0,0,0,.05);padding:.1em .35em;border-radius:3px}
+  ul,ol{margin:.85rem 0 .85rem 1.3rem} li{margin:.45rem 0} li::marker{color:var(--accent)}
+  strong{font-weight:600}
+  table{border-collapse:collapse;width:100%;margin:1.4rem 0;font-size:.92rem;font-family:-apple-system,system-ui,sans-serif}
+  th{text-align:left;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);font-weight:500;padding:.5rem .8rem .5rem 0;border-bottom:1px solid var(--ink)}
+  td{padding:.55rem .8rem .55rem 0;border-bottom:1px solid var(--hair);vertical-align:top;font-variant-numeric:tabular-nums}
+  tr.hero td{font-weight:650}
+  .scroll{overflow-x:auto}
+  .plate{background:var(--plate);color:var(--plate-ink);margin:2.4rem 0;padding:2rem 0 2.2rem;border-radius:0}
+  .plate .plabel{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+  .plate pre{font-family:var(--mono);font-size:.76rem;line-height:1.7;color:var(--plate-soft);overflow-x:auto}
+  .plate pre b{color:var(--plate-ink);font-weight:600}
+  .plate table th{color:var(--plate-soft);border-color:#55503f}
+  .plate table td{border-color:#322c25}
+  .callout{border-left:3px solid var(--accent);padding:.2rem 0 .2rem 1.2rem;margin:1.6rem 0;color:var(--soft);font-size:.98rem}
+  .callout strong{color:var(--ink)}
+  blockquote{margin:1.4rem 0;padding:1.1rem 1.4rem;background:rgba(0,0,0,.04);border-radius:10px;font-size:.92rem;font-family:var(--mono);line-height:1.6;color:var(--soft)}
+  footer{margin-top:5rem;padding:2.2rem 0 3.5rem;border-top:1px solid var(--hair);font-family:var(--mono);font-size:.72rem;color:var(--soft)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="measure">
+    <div class="kicker">Case study · Akash Patel</div>
+    <h1>Macros: a food log you talk to — and the engineering loop behind it</h1>
+    <p class="standfirst">A production, multi-tenant nutrition tracker whose primary interface is
+    conversation — log meals from claude.ai or ChatGPT through an MCP connector, or a PWA when you'd
+    rather tap. Built solo, benchmark-first, with Claude as both the product's engine and the
+    engineering partner. This is the story of the decisions, with the measurements that made them.</p>
+    <div class="statrow">
+      <div class="stat"><b>6</b><span>model backends benchmarked</span></div>
+      <div class="stat"><b>150</b><span>human-verified eval rows</span></div>
+      <div class="stat"><b>4.7s → 0.3s</b><span>first-touch p95</span></div>
+      <div class="stat"><b>$0.091</b><span>/user/mo AI floor</span></div>
+      <div class="stat"><b>34</b><span>tests · isolation-pinned</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="measure">
+
+  <h2>The problem</h2>
+  <p>Food tracking works — adherence is the single best predictor of outcomes — and almost nobody
+  sustains it, because logging is miserable. Database search, portion pickers, five taps per meal.
+  Category 30-day retention runs 8–14%. The bet: <strong>the interface should be a sentence.</strong>
+  "Log the chicken burrito bowl and a coke zero" — and an assistant that already knows your usual
+  meals does the rest. Two numbers only (calories and protein) by design; the rest is stored but
+  never in your face.</p>
+  <p>That bet only works if three hard things hold: the estimates have to be good enough to trust,
+  the marginal cost of AI has to survive a free product, and the conversational surface has to be a
+  first-class production citizen — not a demo bolted to a database.</p>
+
+  <h2>The system</h2>
+</div>
+<div class="plate"><div class="measure">
+  <div class="plabel">One codebase, three surfaces</div>
+  <pre>
+  claude.ai / ChatGPT ──┐  MCP · OAuth 2.1 + PKCE · dynamic client registration
+  iOS PWA / browser ────┼──► <b>FastAPI + FastMCP on Vercel</b> (Fluid, scale-to-one)
+  nightly ops agent ────┘        │  every surface is thin; all SQL lives in one module,
+      (read-only)                │  and user_id is the mandatory first argument everywhere
+                                 ▼
+                          <b>Neon Postgres</b> (always-on, same region)
+  </pre>
+</div></div>
+<div class="measure">
+  <p>Details that carry the weight: an <code>identities</code> table maps multiple providers to one
+  person, so signing in with Google on the web and authorizing claude.ai's connector resolve to the
+  same account. Cross-user isolation is structural — every storage function takes <code>user_id</code>
+  first with no default, so a forgotten argument is a <code>TypeError</code>, not a data leak — and a
+  dedicated test suite pins it. Households share exactly one thing (a saved-meal library), asserted
+  by a test that enumerates what must <em>not</em> cross the boundary.</p>
+
+  <h2>The eval loop — where the architecture came from</h2>
+  <p>Instead of picking a model and prompting until it felt right, I benchmarked six backends on 150
+  human-verified meals from NutriBench (stratified: half with explicit gram weights, half colloquial
+  like "a bowl of rice"), identical prompt and schema everywhere.</p>
+  <div class="scroll"><table>
+    <tr><th>Backend</th><th>energy MAPE</th><th>within 20%</th><th>carb acc @7.5g</th><th>$/user/mo</th></tr>
+    <tr><td>Apple on-device (3B)</td><td>84.7%</td><td>26.7%</td><td>26.7%</td><td>0</td></tr>
+    <tr><td>Apple PCC (server)</td><td>29.3%</td><td>56.7%</td><td>53.3%</td><td>0</td></tr>
+    <tr class="hero"><td>Claude Haiku 4.5</td><td>45.5%</td><td>47.0%</td><td>50.3%</td><td>0.091</td></tr>
+    <tr><td>Claude Sonnet 5</td><td>34.2%</td><td>65.1%</td><td>64.4%</td><td>0.823</td></tr>
+    <tr class="hero"><td>Claude Opus 5</td><td>21.1%</td><td>72.7%</td><td>72.7%</td><td>1.266</td></tr>
+  </table></div>
+  <p>Three findings did real architectural work:</p>
+  <ol>
+    <li><strong>Models know nutrition; they cannot guess portions.</strong> With explicit grams,
+    frontier models land ~11% MAPE; take the grams away and error triples. So the product invests in
+    getting quantity — favorites, "how big was the bowl?", countable units — rather than in bigger
+    models. A model upgrade buys +14 points on colloquial input; the user saying "2 cups" buys ~35.</li>
+    <li><strong>Structure beats prose.</strong> Forcing the model to emit a component parse —
+    <code>{name, grams, per-100g values}</code> — and summing in code matched chain-of-thought accuracy
+    while cutting bias from −30 kcal to +4 and running 20% faster. That parse then <em>became the
+    product</em>: it's the correction UI (fix one component, not the whole guess) and the seed of each
+    user's personal food table. One correction makes a brand food exact forever.</li>
+    <li><strong>The cost frontier is the business model.</strong> At measured token counts, Haiku
+    serves a free tier at $0.091/user/month — ~1,100 users per $100 — while Opus's 72.7%
+    carb accuracy (above NutriBench's published GPT-4o + CoT best) prices a paid "precision" tier.
+    And Apple's Private Cloud Compute, benchmarked the day macOS 27 made it testable, lands
+    Sonnet-class at $0 — the long-term free-tier engine for eligible devices, with the server path
+    kept behind a feature flag as insurance.</li>
+  </ol>
+
+  <h2>Production, honestly</h2>
+  <p>The connector has been in daily use since July — real meals, real corrections, my own household
+  as the first tenants. Four bugs only production could teach, each now a regression test that was
+  verified to fail without its fix: serverless froze function instances while Neon closed their
+  pooled sockets (dead-connection handouts); FastMCP's OAuth discovery routes only work mounted at
+  root, last; a provider default collided two OAuth callbacks on one path; and an auth library never
+  set the field every example reads, so tool <em>listing</em> worked while every tool <em>call</em>
+  failed "not authenticated" — the connector looked healthy and only invocations broke.</p>
+
+  <h3>The latency investigation</h3>
+  <p>Preparing for outside users, I measured the first-touch path: <strong>4.48s</strong> after any
+  idle period, 0.09s warm. Conventional wisdom says "serverless cold start — re-platform." Measuring
+  the layers said otherwise:</p>
+  <div class="scroll"><table>
+    <tr><th>Configuration</th><th>First touch after idle</th></tr>
+    <tr><td>Baseline (Hobby plan, DB scale-to-zero)</td><td>4.48–4.73s</td></tr>
+    <tr><td>+ warm function instance (config)</td><td>1.08s</td></tr>
+    <tr class="hero"><td>+ always-on DB compute (config)</td><td>0.25–0.36s, verified across three idle windows</td></tr>
+  </table></div>
+  <p>The function runtime owned 3.6 of the 4.5 seconds — not the database everyone blames. Both fixes
+  were configuration; the re-platform I'd sketched was declined as timeline risk for $10/month of
+  savings. <strong>~15× p95 improvement, zero code changed.</strong> Knowing when not to migrate is
+  also an engineering deliverable.</p>
+
+  <h3>What opening it up made me check</h3>
+  <p>Publishing the repo and inviting strangers warranted an audit rather than a vibe. It found three
+  things. There was no rate limiting anywhere — and inference costs real money per call, so the most
+  likely incident needed no malice at all, just a loop; that's now a per-user limit held in the
+  database, because in-memory counters are meaningless on serverless where each instance keeps its
+  own count. There was a validation asymmetry: the web API enforced value bounds through its request
+  models while the connector, which has no such models, accepted anything — a second entry point had
+  silently voided the first one's validation, so bounds moved to the single storage layer both
+  doors share. And user-typed meal descriptions flow into the nightly agent's context, which is a
+  prompt-injection surface; the defense that matters there isn't the wording of a prompt, it's that
+  the agent's database session is read-only at connect time and its output is a report rather than
+  an action. <code>THREAT_MODEL.md</code> carries the rest, including a section on what is
+  deliberately <em>not</em> defended.</p>
+
+  <h2>The behavior layer: five hypotheses, one survivor</h2>
+  <p>Estimation quality is only half the product; the other half is whether an assistant holding
+  these tools <em>behaves</em> — looks up before guessing, edits instead of re-logging, asks at most
+  one question. So the connector got its own eval: 16 conversational cases across 8 behavior
+  families, run as real Agent SDK sessions against in-process replicas of the production tools,
+  graded deterministically on tool-call patterns and <em>database end-state</em>, three repetitions
+  per claim, stable case ids so comparisons report per-case flips rather than aggregate scores.</p>
+  <div class="scroll"><table>
+    <tr><th>Hypothesis</th><th>Result (3 reps)</th><th>Decision</th></tr>
+    <tr><td>Baseline production instructions suffice</td><td>44/48</td><td>near ceiling — keep</td></tr>
+    <tr><td>Adding the coaching skill helps</td><td>13/16</td><td><strong>rejected</strong> — parse language induced split logging; skill amended</td></tr>
+    <tr><td>A full instruction rewrite helps</td><td>41/48, better on 0 cases</td><td><strong>rejected</strong> (my own rewrite)</td></tr>
+    <tr><td>A stronger tool description fixes lookups</td><td>0/3 on target, regressed a neighbor</td><td><strong>rejected</strong></td></tr>
+    <tr class="hero"><td>One targeted corrections sentence</td><td>correction 0/3 → 3/3; suite 15/16, no flips</td><td><strong>shipped</strong></td></tr>
+  </table></div>
+  <p>Two instrument bugs surfaced <em>and were caught by the eval itself</em>: harness tool schemas
+  that quietly marked optional parameters required (inducing error-retry "duplicates" production
+  never sees), and a judge grading conversations without sight of the user's turns. And the
+  intervention that beat every prompt variant wasn't a prompt at all: a deterministic idempotency
+  guard in the storage layer — identical inserts within 90 seconds collapse — which also closed a
+  duplicate-entry class the nightly auditor had already flagged in real production data. Four of
+  five hypotheses died in the data, including two of mine. That's the point of having data.</p>
+
+  <h2>The agentic layer</h2>
+  <p>A nightly auditor built on the Claude Agent SDK reviews the last week of data — structurally
+  read-only (the Postgres session is pinned <code>read_only</code> at connection time; the agent
+  <em>cannot</em> write, it can only propose). Its first two nights earned their place in this page:</p>
+  <ul>
+    <li><strong>Night one, the pipeline broke</strong> — Neon's pooler rejects the read-only startup
+    parameter. The agent's report opened: <em>"Both data sources are unreachable — this isn't
+    something a retry will fix, so I'm stopping rather than fabricate a report,"</em> followed by the
+    correct root-cause diagnosis and the fix (use the unpooled DSN, same reason pg_dump does).
+    An auditor that invents plausible numbers when its pipeline fails is worse than none.</li>
+    <li><strong>Night two, I was the one corrected.</strong> The auditor's textbook integrity check
+    (calories ≈ 4·carbs + 4·protein + 9·fat) flagged five entries that were perfectly valid —
+    because this is deliberately a <em>two-number</em> product where carbs and fat may be honestly
+    zero. Generic data-quality rules had encoded someone else's schema. The checks were rewritten
+    around the product's semantics (protein×4 can never exceed calories; full-macro arithmetic only
+    when the user specified everything), and the next run flagged exactly one thing: a genuine
+    double-logged entry.</li>
+  </ul>
+  <p class="callout"><strong>That arc — generic rule, domain pushback, semantics encoded, clean
+  signal —</strong> is the whole thesis of AI implementation work, compressed into two nightly
+  reports and about forty cents of inference.</p>
+  <p>The coaching behavior itself ships as a versioned skill (<code>skills/macros-coach/</code>):
+  look up favorites before estimating, parse components before summing, ask at most one clarifying
+  question, treat corrections as data. Every rule cites the eval that justified it.</p>
+
+  <h2>Try it (60 seconds, live system)</h2>
+  <p>Join: <code>macros.akashpa.tel/join/gen35xgr</code> (Google sign-in; you get a private account
+  plus a shared demo meal library). Then in claude.ai: Settings → Connectors → add
+  <code>https://macros.akashpa.tel/mcp</code> — no keys, no client IDs; the server does dynamic client
+  registration. Say <em>"log the usual breakfast."</em> Refresh the web app. Same row, two surfaces.
+  Export or hard-delete your account any time from settings.</p>
+
+  <h2>Ten days, timestamped</h2>
+  <p>All of the above is recent, dense, and verifiable in commit history: the model benchmark and
+  PCC measurement (Jul 30), the latency decomposition and configuration fix, verified across idle
+  windows (Jul 31 – Aug 1), the AI estimate endpoint shipped, broken by a dependency-manifest gap,
+  diagnosed from one traceback, and fixed (Aug 1), the full front-end redesigned around
+  action-frequency and deployed (Aug 2), and the behavior-eval experiments with their shipped
+  survivors (Aug 2) — alongside a nightly agent that has run unattended since its first evening.
+  The system stayed in production, serving its users, through every one of those changes. The
+  durable assets — the benchmark sample with stable row ids, the behavior suite, the regression
+  tests, the post-mortem docs — are what make the pace safe rather than reckless.</p>
+
+  <h2>This isn't the only shipped thing</h2>
+  <p>Macros is the deepest exhibit, not the only one: a meal-planning app my girlfriend actually
+  uses weekly (live on Vercel + Neon), an interactive mathematical keepsake built around the
+  einstein monotile, this portfolio site, and a representation-geometry research project on
+  cross-model circular features. Different domains, same habit: ship it, instrument it, keep it
+  running.</p>
+
+  <h2>Artifacts</h2>
+  <ul>
+    <li><strong>The repo</strong> — <a href="https://github.com/APatelUIUC/macro-tracker">github.com/APatelUIUC/macro-tracker</a></li>
+    <li><strong>Production MCP server</strong> — <code>server.py</code>: ten tools, OAuth 2.1 + PKCE, live in claude.ai and ChatGPT</li>
+    <li><strong>Accuracy evals</strong> — <code>evals/</code>: six backends over 150 stable-id rows, metric/colloquial splits, raw predictions, the PCC benchmark and its prompt-structure experiments</li>
+    <li><strong>Behavior evals</strong> — <code>evals/mcp/</code>: 16 conversational cases, five variants, three reps, per-case flip tables (<code>RESULTS.md</code>)</li>
+    <li><strong>Agent</strong> — <code>agent/nightly_audit.py</code>: Agent SDK, session-enforced read-only, launchd-scheduled</li>
+    <li><strong>Skill</strong> — <code>skills/macros-coach/SKILL.md</code></li>
+    <li><strong>Threat model</strong> — <code>THREAT_MODEL.md</code>: controls, residual risk, what is deliberately not defended, incident playbook</li>
+    <li><strong>The app</strong> — <a href="https://macros.akashpa.tel">macros.akashpa.tel</a></li>
+  </ul>
+
+  <h2>Method: overusing the tools, on purpose</h2>
+  <p>This was built solo, with Claude Code as the engineering partner throughout — the evals, the
+  agents, the migrations, and most of the code were produced in that loop, including the parts
+  where Claude's own proposals (an instruction rewrite, a re-platform) were tested and rejected on
+  evidence. Working this way is a skill with a shape: decompose to where measurement can steer,
+  keep the human on the decisions data can't make, and never ship the model's confidence without a
+  check the model can't fake. The system being <em>about</em> Claude while being built <em>with</em>
+  Claude wasn't a gimmick; it's how one engineer covers benchmark science, infrastructure,
+  agent design, and a front-end redesign in the same ten days — and it's the working style I'd
+  bring to a team.</p>
+  <p style="margin-top:1.6rem;color:var(--soft);font-size:.95rem">Akash Patel · Raleigh-Durham, NC ·
+  <a href="https://akashpa.tel">akashpa.tel</a></p>
+</div>
+</main>
+
+<footer>
+  <div class="measure">akash patel · <a href="https://akashpa.tel">akashpa.tel</a> · the system described here is live at
+  <a href="https://macros.akashpa.tel">macros.akashpa.tel</a></div>
+</footer>
+
+</body>
+</html>
