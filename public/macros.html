@@ -251,6 +251,34 @@
     <li><strong>The app</strong> — <a href="https://macros.akashpa.tel">macros.akashpa.tel</a></li>
   </ul>
 
+  <h2>The reading behind the decisions</h2>
+  <p>Every load-bearing decision above leaned on something read first. The honest list, mapped to
+  what it changed:</p>
+  <ul>
+    <li><strong>NutriBench v2</strong> — <a href="https://arxiv.org/html/2407.12843v3">arXiv:2407.12843</a>,
+      15,617 human-verified meal descriptions with macro labels. Supplied the 150-row stable-id
+      benchmark sample and the metric/colloquial split that produced the central finding — models
+      know nutrition facts but cannot guess portions — and its published GPT-4o + CoT baseline is
+      the external reference point the results are compared against.</li>
+    <li><strong>Apple's Foundation Models &amp; Private Cloud Compute documentation</strong> — the
+      availability/quota APIs and the generation-time entitlement gating
+      (<code>com.apple.developer.private-cloud-compute</code>), verified empirically rather than
+      assumed. This reading plus the PCC benchmark set the free-tier model ladder: PCC where
+      entitled, Haiku 4.5 everywhere else.</li>
+    <li><strong>TwoMillionKit</strong> — <a href="https://github.com/insidegui/TwoMillionKit">insidegui/TwoMillionKit</a>,
+      which documents the macOS <code>fm</code> CLI mechanism that made benchmarking PCC locally
+      possible at all before any entitlement exists.</li>
+    <li><strong>The MCP specification and its auth stack</strong> — the Model Context Protocol spec,
+      OAuth 2.1, and RFC 7591 dynamic client registration. These are why the connector works in
+      claude.ai and ChatGPT with a URL and zero manual credentials.</li>
+    <li><strong>Ode's engineering writing</strong> — <em>Stop Designing Chatbots</em>, their posts on
+      eval-driven development and the "Rotten Tomatoes problem" in evals, <em>Using MCPs with
+      Evals</em>, and Eddie Siegel on deterministic checks plus secondary verification. Read early,
+      and visible in the result: this app deliberately has no chat window, the behavior suite
+      reports per-case flip tables rather than a single score, and the estimator's totals are
+      summed in code the model never touches.</li>
+  </ul>
+
   <h2>Method: overusing the tools, on purpose</h2>
   <p>This was built solo, with Claude Code as the engineering partner throughout — the evals, the
   agents, the migrations, and most of the code were produced in that loop, including the parts
