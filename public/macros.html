@@ -38,6 +38,8 @@
   .plate pre b{color:var(--plate-ink);font-weight:600}
   .plate table th{color:var(--plate-soft);border-color:#55503f}
   .plate table td{border-color:#322c25}
+  .toc{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--soft);margin-top:1.1rem}
+  .toc a{text-decoration:none;color:var(--soft)} .toc a:hover{color:var(--accent)}
   .callout{border-left:3px solid var(--accent);padding:.2rem 0 .2rem 1.2rem;margin:1.6rem 0;color:var(--soft);font-size:.98rem}
   .callout strong{color:var(--ink)}
   blockquote{margin:1.4rem 0;padding:1.1rem 1.4rem;background:rgba(0,0,0,.04);border-radius:10px;font-size:.92rem;font-family:var(--mono);line-height:1.6;color:var(--soft)}
@@ -54,6 +56,11 @@
     conversation — log meals from claude.ai or ChatGPT through an MCP connector, or a PWA when you'd
     rather tap. Built solo, benchmark-first, with Claude as both the product's engine and the
     engineering partner. This is the story of the decisions, with the measurements that made them.</p>
+    <nav class="toc"><a href="#problem">problem</a> · <a href="#system">system</a> ·
+    <a href="#ai">what the AI does</a> · <a href="#evals">the eval loop</a> ·
+    <a href="#production">production</a> · <a href="#behavior">behavior evals</a> ·
+    <a href="#agent">the agent</a> · <a href="#try">try it live</a> ·
+    <a href="#reading">reading</a> · <a href="#method">method</a></nav>
     <div class="statrow">
       <div class="stat"><b>6</b><span>model backends benchmarked</span></div>
       <div class="stat"><b>150</b><span>human-verified eval rows</span></div>
@@ -67,7 +74,7 @@
 <main>
 <div class="measure">
 
-  <h2>The problem</h2>
+  <h2 id="problem">The problem</h2>
   <p>Food tracking works — adherence is the single best predictor of outcomes — and almost nobody
   sustains it, because logging is miserable. Database search, portion pickers, five taps per meal.
   Category 30-day retention runs 8–14%. The bet: <strong>the interface should be a sentence.</strong>
@@ -78,7 +85,7 @@
   the marginal cost of AI has to survive a free product, and the conversational surface has to be a
   first-class production citizen — not a demo bolted to a database.</p>
 
-  <h2>The system</h2>
+  <h2 id="system">The system</h2>
 </div>
 <div class="plate"><div class="measure">
   <div class="plabel">One codebase, three surfaces</div>
@@ -99,7 +106,34 @@
   dedicated test suite pins it. Households share exactly one thing (a saved-meal library), asserted
   by a test that enumerates what must <em>not</em> cross the boundary.</p>
 
-  <h2>The eval loop — where the architecture came from</h2>
+  <h2 id="ai">What the AI actually does</h2>
+  <p>Four AI systems ship in production. Each has a distinct job, and each carries its own guardrail —
+  because the recurring design question in this project was never "can the model do it?" but
+  "what happens when it's wrong?"</p>
+  <ul>
+    <li><strong>Conversational logging — the connector.</strong> Ten MCP tools (log, edit, delete,
+    favorites, recent meals, day and range queries, targets) exposed to claude.ai and ChatGPT over
+    OAuth. The assistant's standing orders are behavioral, and each one traces to an eval: look up
+    saved meals before guessing — "my usual shake" is retrieval, not estimation — log one entry per
+    eating event, apply corrections immediately without relitigating the original guess.</li>
+    <li><strong>In-app estimation — a describe bar, not a chatbot.</strong> The web app deliberately
+    has no chat window. You type "moo goo gai pan with a bowl of fried rice" and the pipeline tries
+    an exact favorites match first; only then does it ask Claude — and never for totals, only for a
+    component parse (<code>{name, grams, per-100g values}</code>) that code multiplies and sums.
+    The parse persists with the entry, so a wrong guess is corrected per component, not re-estimated
+    wholesale. And the estimate endpoint is read-only by contract: <em>estimating never writes;
+    logging is a separate, explicit act.</em></li>
+    <li><strong>The nightly auditor.</strong> An agent that reviews the week's data every night from
+    a database session that is read-only at connection time — it structurally cannot act, only
+    report. Its first two nights are the best story on this page (below).</li>
+    <li><strong>A versioned coaching skill, and a model seam.</strong> The assistant's behavior
+    rules ship as a versioned skill in the repo, every rule citing the eval that justified it. The
+    estimator's model is a single environment variable — Opus today, Haiku under a cost incident,
+    Apple's Private Cloud Compute when the entitlement lands — so model strategy changes are
+    configuration, not code.</li>
+  </ul>
+
+  <h2 id="evals">The eval loop — where the architecture came from</h2>
   <p>Instead of picking a model and prompting until it felt right, I benchmarked six backends on 150
   human-verified meals from NutriBench (stratified: half with explicit gram weights, half colloquial
   like "a bowl of rice"), identical prompt and schema everywhere.</p>
@@ -130,7 +164,7 @@
     kept behind a feature flag as insurance.</li>
   </ol>
 
-  <h2>Production, honestly</h2>
+  <h2 id="production">Production, honestly</h2>
   <p>The connector is in daily use — real meals, real corrections, my own household
   as the first tenants. Four bugs only production could teach, each now a regression test that was
   verified to fail without its fix: serverless froze function instances while Neon closed their
@@ -168,7 +202,7 @@
   an action. <code>THREAT_MODEL.md</code> carries the rest, including a section on what is
   deliberately <em>not</em> defended.</p>
 
-  <h2>The behavior layer: five hypotheses, one survivor</h2>
+  <h2 id="behavior">The behavior layer: five hypotheses, one survivor</h2>
   <p>Estimation quality is only half the product; the other half is whether an assistant holding
   these tools <em>behaves</em> — looks up before guessing, edits instead of re-logging, asks at most
   one question. So the connector got its own eval: 16 conversational cases across 8 behavior
@@ -191,7 +225,7 @@
   duplicate-entry class the nightly auditor had already flagged in real production data. Four of
   five hypotheses died in the data, including two of mine. That's the point of having data.</p>
 
-  <h2>The agentic layer</h2>
+  <h2 id="agent">The agentic layer</h2>
   <p>A nightly auditor built on the Claude Agent SDK reviews the last week of data — structurally
   read-only (the Postgres session is pinned <code>read_only</code> at connection time; the agent
   <em>cannot</em> write, it can only propose). Its first two nights earned their place in this page:</p>
@@ -216,7 +250,7 @@
   look up favorites before estimating, parse components before summing, ask at most one clarifying
   question, treat corrections as data. Every rule cites the eval that justified it.</p>
 
-  <h2>Try it (60 seconds, live system)</h2>
+  <h2 id="try">Try it (60 seconds, live system)</h2>
   <p>Join: <code>macros.akashpa.tel/join/gen35xgr</code> (Google sign-in; you get a private account
   plus a shared demo meal library). Then in claude.ai: Settings → Connectors → add
   <code>https://macros.akashpa.tel/mcp</code> — no keys, no client IDs; the server does dynamic client
@@ -229,8 +263,11 @@
   nerve; it's the assets underneath: a benchmark sample with stable row ids so any model change can
   be compared per-case, a behavior suite that catches connector regressions, regression tests
   written to fail without their fix, a cross-user isolation suite that fails loudly on a forgotten
-  argument, and post-mortems that keep solved problems solved. Those are what make a change cheap,
-  and they're the part of this I'd bring to someone else's codebase first.</p>
+  argument, and post-mortems that keep solved problems solved. The API is versioned and
+  <code>/api/v1</code> is frozen — an installed client would pin it forever, so breaking changes get
+  a <code>/v2</code>, not an edit. And because the model is a seam rather than a dependency, the
+  next model generation is an afternoon's benchmark run, not a rewrite. Those are what make a
+  change cheap, and they're the part of this I'd bring to someone else's codebase first.</p>
 
   <h2>This isn't the only shipped thing</h2>
   <p>Macros is the deepest exhibit, not the only one: a meal-planning app my girlfriend actually
@@ -251,7 +288,7 @@
     <li><strong>The app</strong> — <a href="https://macros.akashpa.tel">macros.akashpa.tel</a></li>
   </ul>
 
-  <h2>The reading behind the decisions</h2>
+  <h2 id="reading">The reading behind the decisions</h2>
   <p>Every load-bearing decision above leaned on something read first. The honest list, mapped to
   what it changed:</p>
   <ul>
@@ -290,7 +327,7 @@
       summed in code the model never touches.</li>
   </ul>
 
-  <h2>Method: overusing the tools, on purpose</h2>
+  <h2 id="method">Method: overusing the tools, on purpose</h2>
   <p>This was built solo, with Claude Code as the engineering partner throughout — the evals, the
   agents, the migrations, and most of the code were produced in that loop, including the parts
   where Claude's own proposals (an instruction rewrite, a re-platform) were tested and rejected on
